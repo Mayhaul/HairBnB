@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Listings</title>
+    <style>
+        /* Modern Reset & Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Page Header */
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        /* Responsive Grid (Replaces the <ul>) */
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            list-style: none;
+        }
+
+        /* Individual Listing Card Link */
+        .listing-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        /* Listing Card Container */
+        .listing-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eef0f2;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border-color: #0066cc;
+        }
+
+        .listing-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .listing-action {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #0066cc;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Optional empty state styling */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: #fff;
+            border-radius: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <h1 class="page-title">All Listings</h1>
+
+        <form action="./form">
+            <button type="submit">Add a Listing!</button>
+        </form>
+
+        <% if (listings && listings.length > 0) { %>
+            <ul class="listings-grid">
+                <% listings.forEach(listing => { %>
+                    <li>
+                        <a href="/listings/<%= listing._id %>" class="listing-card-link">
+                            <article class="listing-card">
+                                <h2 class="listing-title"><%= listing.title %></h2>
+                                <span class="listing-action">View Listing &rarr;</span>
+                            </article>
+                        </a>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <div class="empty-state">
+                <p>No listings found.</p>
+            </div>
+        <% } %>
+    </main>
+
+</body>
+</html>
