@@ -12,5 +12,7 @@ app.set('views', path.join(__dirname,'views'));
 import routes from './routes/index.js'
 
 app.use('/',routes);
-
+app.get('/',(req,res)=>{
+    res.redirect("/listings");
+})
 export default app;

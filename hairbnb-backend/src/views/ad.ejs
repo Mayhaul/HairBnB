@@ -93,11 +93,43 @@
         .ad-location-icon {
             margin-right: 6px;
         }
+        .delete{
+            border-radius: 10px;
+            background-color: red;
+            color: black;
+            height: 40px;
+            width: 100px;
+            border: 2px solid white;
+        }
+        .edit{
+            border-radius: 10px;
+            background-color: green;
+            color: black;
+            height: 40px;
+            width: 100px;
+            border: 2px solid white;
+        }
+        .buttons{
+            display: flex;
+            justify-content:space-between;
+        }
+        .back{
+            border-radius: 10px;
+            /* background-color: blue; */
+            height: 40px;
+            width: 100px;
+            border: 2px solid white;
+        }
     </style>
+
 </head>
 <body>
-
+    
     <article class="ad-card">
+        <form action="/listings" class="back">
+            <button>Go Back</button>
+        </form>
+        
         <% if (ad.image) { %>
             <div class="ad-image-container">
                 <img class="ad-image" src="<%= ad.image.url %>" alt="<%= ad.title %>">
@@ -113,8 +145,24 @@
                 <span class="ad-location-icon">📍</span>
                 <span><%= ad.location %>, <%= ad.country %></span>
             </div>
+            <div class="buttons">
+                <form action="<%= ad._id%>/delete" method="post">
+                <br>
+                <button class="delete">
+                    Delete
+                </button>
+
+            </form>
+
+            <form action="<%= ad._id %>/edit" method="GET">
+                <br>
+                <button type="submit" class="edit">Edit Ad</button>
+            </form>
+            
+        </div>
         </div>
     </article>
+    
 
 </body>
 </html>

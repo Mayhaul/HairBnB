@@ -26,7 +26,7 @@ router.post('/submit', async (req, res) => {
 });
 
 
-
+// listings route
 router.get('/',async (req,res)=>{
     const listings = await Listing.find({});
     res.render("listings.ejs", { listings });
@@ -39,6 +39,32 @@ router.get('/:id',async (req,res)=>{
     res.render("ad.ejs", {ad});
     console.log(ad);
 })
+
+// Edit listing
+router.get('/:id/edit', async (req,res)=>{
+    const id = req.params.id;
+    const ad = await Listing.findById(id);
+
+    res.render("editForm.ejs",{ad});
+    console.log(ad);
+})
+
+router.post('/:id/edit', async(req,res)=>{
+    const NewData = req.body;
+    const {id} = req.params;
+
+    await Listing.findByIdAndUpdate(id, req.body);
+    res.redirect(`/listings/${id}`); 
+})
+
+// Delete
+router.post('/:id/delete', async (req,res)=>{
+    const {id} = req.params;
+    await Listing.findByIdAndDelete(id);
+
+    res.redirect('/listings')
+})
+
 
 
 export default router;
