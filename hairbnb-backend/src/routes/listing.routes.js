@@ -28,41 +28,65 @@ router.post('/submit', async (req, res) => {
 
 // listings route
 router.get('/',async (req,res)=>{
-    const listings = await Listing.find({});
-    res.render("listings.ejs", { listings });
+    try{
+        const listings = await Listing.find({});
+        res.render("listings.ejs", { listings });
+    }catch(e){
+        console.log(`GET ERROR: ${e}`)
+        res.status(404).send(`Failed to show listings: ${e.message}`);
+    }
     
 })
 
 // open the selected listing.
 router.get('/:id',async (req,res)=>{
-    const ad = await Listing.findById(req.params.id);
-    res.render("ad.ejs", {ad});
-    console.log(ad);
+    try{
+        const ad = await Listing.findById(req.params.id);
+        res.render("ad.ejs", {ad});
+        console.log(ad);
+    }catch(e){
+        res.send(e.message);
+    }
 })
 
 // Edit listing
 router.get('/:id/edit', async (req,res)=>{
-    const id = req.params.id;
-    const ad = await Listing.findById(id);
+    try {
+        const id = req.params.id;
+        const ad = await Listing.findById(id);
 
-    res.render("editForm.ejs",{ad});
-    console.log(ad);
+        res.render("editForm.ejs",{ad});
+        console.log(ad);
+
+    } catch (e) {
+        res.send(e.message);
+    }   
 })
 
 router.post('/:id/edit', async(req,res)=>{
-    const NewData = req.body;
-    const {id} = req.params;
+    try {
+        const NewData = req.body;
+        const {id} = req.params;
 
-    await Listing.findByIdAndUpdate(id, req.body);
-    res.redirect(`/listings/${id}`); 
+        await Listing.findByIdAndUpdate(id, req.body);
+        res.redirect(`/listings/${id}`); 
+
+    } catch (e) {
+        res.send(e.message);
+    }
 })
 
 // Delete
 router.post('/:id/delete', async (req,res)=>{
-    const {id} = req.params;
-    await Listing.findByIdAndDelete(id);
+    try {
+        const {id} = req.params;
+        await Listing.findByIdAndDelete(id);
 
-    res.redirect('/listings')
+        res.redirect('/listings');
+
+    } catch (e) {
+        res.send(e.message);
+    }
 })
 
 
