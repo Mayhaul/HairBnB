@@ -1,14 +1,21 @@
 import express from 'express';
-const router = express.Router();
-import path from 'path';
 import ListingRoutes from './listing.routes.js';
-import { fileURLToPath } from 'url';
+import apiError from '../utils/ApiError.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-router.use(express.static(path.join(__dirname, "public")));
+const router = express.Router();
 
-router.use('/listings',ListingRoutes);
+// Mount listings routes
+router.use('/listings', ListingRoutes);
 
+
+router.all('*', (req,res,next)=>{
+    next(new apiError(404,'Page not Found'));
+})
+
+// Global Error Handler Middleware
+router.use((err, req, res, next) => {
+    let {statusCode = 500, message = 'some Mongoose error'} = err;
+    res.status(statusCode).render("error.ejs", { err: { statusCode, message, stack: err.stack } });
+});
 
 export default router;

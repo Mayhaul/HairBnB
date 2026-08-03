@@ -147,6 +147,7 @@
               <div class="card-body-content">
                 <div>
                   <h2 class="listing-title"><%= listing.title %></h2>
+                  <h9 ><%= listing.location%>, <%= listing.country %></h9>
                   <% if (listing.price) { %>
                     <p class="listing-price">&#8377; <%= listing.price.toLocaleString("en-IN") %></p>
                   <% } %>

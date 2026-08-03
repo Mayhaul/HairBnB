@@ -1,87 +1,65 @@
 import express from "express";
 const router = express.Router();
 
+import { validateListing } from "../middlewares/validation.middleware.js";
+import wrapAsync from "../utils/asyncHandler.js"; 
 import Listing from '../models/Listing.model.js'
+import apiError from "../utils/ApiError.js";
+import { ListingSchema } from "../schemas/listing.schema.js";
 
-router.get('/form',(req,res)=>{
+router.get('/form', (req, res) => {
     res.render('form.ejs');
 });
 
-router.post('/submit', async (req, res) => {
-    try {
-        await Listing.create(req.body);
-        console.log("submitted");
-        res.redirect('/listings');
-    } catch (e) {
-        console.error("CREATE ERROR:", e);
-        res.status(400).send(`Failed to submit: ${e.message}`);
-    }
-});
-
+router.post('/submit',validateListing, wrapAsync(async (req, res) => {
+    ListingSchema.validate(req.body());
+    await Listing.create(req.body);
+    console.log("submitted");
+    res.redirect('/listings');
+}));
 
 // listings route
-router.get('/',async (req,res)=>{
-    try{
-        const listings = await Listing.find({});
-        res.render("listings.ejs", { listings });
-    }catch(e){
-        console.log(`GET ERROR: ${e}`)
-        res.status(404).send(`Failed to show listings: ${e.message}`);
-    }
-    
-})
+router.get('/', wrapAsync(async (req, res) => {
+    const listings = await Listing.find({});
+    res.render("listings.ejs", { listings });
+}));
 
 // open the selected listing.
-router.get('/:id',async (req,res)=>{
-    try{
-        const ad = await Listing.findById(req.params.id);
-        res.render("ad.ejs", {ad});
-        console.log(ad);
-    }catch(e){
-        res.send(e.message);
+router.get('/:id', wrapAsync(async (req, res) => {
+    const ad = await Listing.findById(req.params.id);
+    if(!ad){
+        throw new apiError(404,'Listing Not Found');
     }
-})
+    res.render("ad.ejs", { ad });
+    console.log(ad);
+}));
 
 // Edit listing
-router.get('/:id/edit', async (req,res)=>{
-    try {
-        const id = req.params.id;
-        const ad = await Listing.findById(id);
+router.get('/:id/edit', wrapAsync(async (req, res) => {
+    const id = req.params.id;
+    const ad = await Listing.findById(id);
 
-        res.render("editForm.ejs",{ad});
-        console.log(ad);
-
-    } catch (e) {
-        res.send(e.message);
-    }   
-})
-
-router.post('/:id/edit', async(req,res)=>{
-    try {
-        const NewData = req.body;
-        const {id} = req.params;
-
-        await Listing.findByIdAndUpdate(id, req.body);
-        res.redirect(`/listings/${id}`); 
-
-    } catch (e) {
-        res.send(e.message);
+    if(!ad){
+        throw new apiError(404,'Listing Not Found');
     }
-})
+    res.render("editForm.ejs", { ad });
+    console.log(ad);
+}));
+
+router.post('/:id/edit', wrapAsync(async (req, res) => {
+    const { id } = req.params;
+
+    await Listing.findByIdAndUpdate(id, req.body);
+    res.redirect(`/listings/${id}`); 
+}));
+
 
 // Delete
-router.post('/:id/delete', async (req,res)=>{
-    try {
-        const {id} = req.params;
-        await Listing.findByIdAndDelete(id);
+router.post('/:id/delete', wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    await Listing.findByIdAndDelete(id);
 
-        res.redirect('/listings');
+    res.redirect('/listings');
+}));
 
-    } catch (e) {
-        res.send(e.message);
-    }
-})
-
-
- 
 export default router;
