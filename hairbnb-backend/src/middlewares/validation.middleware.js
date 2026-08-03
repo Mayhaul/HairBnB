@@ -1,5 +1,5 @@
-import { ListingSchema } from "../schemas/listing.schema"
-import apiError from "../utils/ApiError";
+import { ListingSchema } from "../schemas/listing.schema.js"
+import apiError from "../utils/ApiError.js";
 
 export const validateListing = (req,res,next) =>{
     let { error } = ListingSchema.validate(req.body);
