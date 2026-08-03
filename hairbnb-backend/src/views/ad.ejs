@@ -1,169 +1,141 @@
-<%-layout("/layouts/boilerplate")%>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= ad.title %></title>
-    <style>
-        /* Modern Reset & Base Styles */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<%- layout("/layouts/boilerplate") %>
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f6f8;
-            color: #333;
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+<style>
+  /* Page Container Layout */
+  .ad-show-container {
+    max-width: 600px;
+    margin: 2rem auto;
+  }
 
-        /* Card Container */
-        .ad-card {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            max-width: 500px;
-            width: 100%;
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+  /* Card Container */
+  .ad-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
 
-        .ad-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        }
+  .ad-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
 
-        /* Image Styling */
-        .ad-image-container {
-            width: 100%;
-            height: 250px;
-            background-color: #e9ecef;
-            overflow: hidden;
-        }
+  /* Image Styling */
+  .ad-image-container {
+    width: 100%;
+    height: 300px;
+    background-color: #e9ecef;
+    overflow: hidden;
+  }
 
-        .ad-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
+  .ad-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 
-        /* Content Section */
-        .ad-content {
-            padding: 24px;
-        }
+  /* Content Section */
+  .ad-content {
+    padding: 24px;
+  }
 
-        .ad-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 8px;
-        }
+  .ad-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+  }
 
-        .ad-price {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #2e7d32; /* Accent green color */
-            margin-bottom: 16px;
-        }
+  .ad-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2e7d32; /* Accent green color */
+    margin-bottom: 16px;
+  }
 
-        .ad-description {
-            color: #555;
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-        }
+  .ad-description {
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 
-        /* Footer / Metadata */
-        .ad-meta {
-            display: flex;
-            align-items: center;
-            font-size: 0.875rem;
-            color: #777;
-            border-top: 1px solid #eee;
-            padding-top: 16px;
-        }
+  /* Metadata Section */
+  .ad-meta {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #777;
+    border-top: 1px solid #eee;
+    padding-top: 16px;
+    margin-bottom: 20px;
+  }
 
-        .ad-location-icon {
-            margin-right: 6px;
-        }
-        .delete{
-            border-radius: 10px;
-            background-color: red;
-            color: black;
-            height: 40px;
-            width: 100px;
-            border: 2px solid white;
-        }
-        .edit{
-            border-radius: 10px;
-            background-color: green;
-            color: black;
-            height: 40px;
-            width: 100px;
-            border: 2px solid white;
-        }
-        .buttons{
-            display: flex;
-            justify-content:space-between;
-        }
-        .back{
-            border-radius: 10px;
-            /* background-color: blue; */
-            height: 40px;
-            width: 100px;
-            border: 2px solid white;
-        }
-    </style>
+  .ad-location-icon {
+    margin-right: 6px;
+  }
 
-</head>
-<body>
-    
-    <article class="ad-card">
-        <form action="/listings" class="back">
-            <button>Go Back</button>
+  /* Action Buttons Section */
+  .action-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-custom {
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-custom:hover {
+    opacity: 0.9;
+  }
+</style>
+
+<div class="container ad-show-container">
+  
+  <!-- Back Button -->
+  <a href="/listings" class="btn btn-outline-secondary mb-3 btn-custom">
+    &larr; Go Back
+  </a>
+
+  <!-- Listing Card -->
+  <article class="ad-card">
+    <% if (ad.image && ad.image.url) { %>
+      <div class="ad-image-container">
+        <img class="ad-image" src="<%= ad.image.url %>" alt="<%= ad.title %>">
+      </div>
+    <% } %>
+
+    <div class="ad-content">
+      <h1 class="ad-title"><%= ad.title %></h1>
+      <p class="ad-price">&#8377; <%= ad.price.toLocaleString("en-IN") %></p>
+      <p class="ad-description"><%= ad.description %></p>
+
+      <div class="ad-meta">
+        <span class="ad-location-icon">📍</span>
+        <span><%= ad.location %>, <%= ad.country %></span>
+      </div>
+
+      <!-- Action Buttons Row -->
+      <div class="action-buttons">
+        <a href="/listings/<%= ad._id %>/edit" class="btn btn-dark btn-custom">
+          Edit Ad
+        </a>
+
+        <form action="/listings/<%= ad._id %>/delete" method="POST" class="d-inline">
+          <button type="submit" class="btn btn-danger btn-custom">
+            Delete
+          </button>
         </form>
-        
-        <% if (ad.image) { %>
-            <div class="ad-image-container">
-                <img class="ad-image" src="<%= ad.image.url %>" alt="<%= ad.title %>">
-            </div>
-        <% } %>
+      </div>
 
-        <div class="ad-content">
-            <h1 class="ad-title"><%= ad.title %></h1>
-            <p class="ad-price">$<%= ad.price %></p>
-            <p class="ad-description"><%= ad.description %></p>
-            
-            <div class="ad-meta">
-                <span class="ad-location-icon">📍</span>
-                <span><%= ad.location %>, <%= ad.country %></span>
-            </div>
-            <div class="buttons">
-                <form action="<%= ad._id%>/delete" method="post">
-                <br>
-                <button class="delete">
-                    Delete
-                </button>
+    </div>
+  </article>
 
-            </form>
-
-            <form action="<%= ad._id %>/edit" method="GET">
-                <br>
-                <button type="submit" class="edit">Edit Ad</button>
-            </form>
-            
-        </div>
-        </div>
-    </article>
-    
-
-</body>
-</html>
+</div>

@@ -1,130 +1,169 @@
-<%-layout("/layouts/boilerplate")%>
+<%- layout("/layouts/boilerplate") %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Listings</title>
-    <style>
-        /* Modern Reset & Global Styles */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+  /* Section Layout */
+  .listings-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+  }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f6f8;
-            color: #333;
-            line-height: 1.6;
-            padding: 40px 20px;
-        }
+  .listings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+  .page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111;
+    margin: 0;
+  }
 
-        /* Page Header */
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #111;
-            margin-bottom: 24px;
-            text-align: left;
-        }
+  /* Responsive Grid */
+  .listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    padding: 0;
+    list-style: none;
+  }
 
-        /* Responsive Grid (Replaces the <ul>) */
-        .listings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            list-style: none;
-        }
+  /* Card Link */
+  .listing-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
 
-        /* Individual Listing Card Link */
-        .listing-card-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
+  /* Card Container */
+  .listing-card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef0f2;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
 
-        /* Listing Card Container */
-        .listing-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            border: 1px solid #eef0f2;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+  .listing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
 
-        .listing-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            border-color: #0066cc;
-        }
+  /* Fixed Image Container with Aspect Ratio */
+  .card-img-container {
+    width: 100%;
+    height: 200px; /* Fixed height for image area */
+    background-color: #e9ecef;
+    overflow: hidden;
+  }
 
-        .listing-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-        }
+  /* Scaled Image */
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Keeps image aspect ratio without stretching */
+    display: block;
+    transition: transform 0.3s ease;
+  }
 
-        .listing-action {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #0066cc;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+  .listing-card:hover .card-img {
+    transform: scale(1.05); /* Subtle zoom effect on hover */
+  }
 
-        /* Optional empty state styling */
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            background: #fff;
-            border-radius: 12px;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
+  /* Card Body Content */
+  .card-body-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+  }
 
-    <main class="container">
-        <h1 class="page-title">All Listings</h1>
+  .listing-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+  }
 
-        <form action="/listings/form">
-            <button type="submit">Add a Listing!</button>
-        </form>
+  .listing-price {
+    font-weight: 700;
+    color: #2e7d32;
+    margin-bottom: 12px;
+  }
 
-        <% if (listings && listings.length > 0) { %>
-            <ul class="listings-grid">
-                <% listings.forEach(listing => { %>
-                    <li>
-                        <a href="/listings/<%= listing._id %>" class="listing-card-link">
-                            <article class="listing-card">
-                                <h2 class="listing-title"><%= listing.title %></h2>
-                                <span class="listing-action">View Listing &rarr;</span>
-                            </article>
-                        </a>
-                    </li>
-                <% }) %>
-            </ul>
-        <% } else { %>
-            <div class="empty-state">
-                <p>No listings found.</p>
-            </div>
-        <% } %>
-    </main>
+  .listing-action {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0066cc;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
 
-</body>
-</html>
+  /* Empty state styling */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border-radius: 12px;
+    color: #666;
+  }
+</style>
+
+<div class="container listings-container">
+  
+  <div class="listings-header">
+    <h1 class="page-title">All Listings</h1>
+    <a href="/listings/form" class="btn btn-danger btn-custom">
+      + Add New Listing
+    </a>
+  </div>
+
+  <% if (listings && listings.length > 0) { %>
+    <ul class="listings-grid">
+      <% listings.forEach(listing => { %>
+        <li>
+          <a href="/listings/<%= listing._id %>" class="listing-card-link">
+            <article class="listing-card">
+              
+              <!-- Image Container -->
+              <div class="card-img-container">
+                <% if (listing.image && listing.image.url) { %>
+                  <img src="<%= listing.image.url %>" alt="<%= listing.title %>" class="card-img">
+                <% } else { %>
+                  <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=600&auto=format&fit=crop" alt="Default listing image" class="card-img">
+                <% } %>
+              </div>
+
+              <!-- Content Area -->
+              <div class="card-body-content">
+                <div>
+                  <h2 class="listing-title"><%= listing.title %></h2>
+                  <% if (listing.price) { %>
+                    <p class="listing-price">&#8377; <%= listing.price.toLocaleString("en-IN") %></p>
+                  <% } %>
+                </div>
+                <span class="listing-action">View Listing &rarr;</span>
+              </div>
+
+            </article>
+          </a>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <div class="empty-state">
+      <h3>No listings found.</h3>
+      <p class="text-muted">Be the first to add a new place!</p>
+    </div>
+  <% } %>
+
+</div>

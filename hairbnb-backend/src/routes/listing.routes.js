@@ -1,13 +1,6 @@
 import express from "express";
 const router = express.Router();
 
-
-// ---------------- MIDDLEWARE ----------------
-router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
-
-
-
 import Listing from '../models/Listing.model.js'
 
 router.get('/form',(req,res)=>{
@@ -90,5 +83,5 @@ router.post('/:id/delete', async (req,res)=>{
 })
 
 
-
+ 
 export default router;
