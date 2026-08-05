@@ -18,9 +18,12 @@ app.engine("ejs", ejsMate);
 
 import routes from './routes/index.js'
 
-app.use('/',routes);
-
 app.get('/',(req,res)=>{
     res.redirect("/listings");
 })
+
+
+app.use('/',routes);
+
+
 export default app;

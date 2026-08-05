@@ -31,6 +31,8 @@ const userSchema = new mongoose.Schema(
     }
 );
 
+
+
 userSchema.post('findOneAndDelete', async (DeletedUser)=>{
     // we can add here the logic for deleting everything the user is associated to in our app.
     console.log(DeletedUser);
