@@ -142,7 +142,7 @@
     </div>
     <h4 class="ms-3">Leave a review</h4>
     <div class="p-3">
-      <form action="/listings/<%= ad._id %>/review" method="post">
+      <form action="/listings/<%= ad._id %>/reviews" method="post">
         <div>
           <label for="rating"> Rating ->
             <br>
@@ -169,7 +169,7 @@
                 <h6 class="mb-0 text-primary">Rating: <%= r.rating %> / 5 ⭐</h6>
               </div>
               <p class="mb-1 text-secondary"><%= r.comment %></p>
-               <form action="/listings/<%= ad._id %>/deletereview" method="post">
+               <form action="/listings/<%= ad._id %>/reviews/<%= r._id %>" method="post">
                   <button class="btn btn-danger" type="submit"> Delete </button>
                </form>
             </div>

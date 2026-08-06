@@ -1,12 +1,13 @@
 import express from 'express';
 import ListingRoutes from './listing.routes.js';
 import apiError from '../utils/ApiError.js';
+import reviewRoutes from './review.routes.js';
 
 const router = express.Router();
 
 // Mount listings routes
 router.use('/listings', ListingRoutes);
-
+router.use('/listings/:id/reviews',reviewRoutes);
 
 router.all('*', (req,res,next)=>{
     next(new apiError(404,'Page not Found'));

@@ -65,29 +65,6 @@ router.post('/:id/delete', wrapAsync(async (req, res) => {
     res.redirect('/listings');
 }));
 
-// Add Review
-router.post('/:id/review',validateReview, wrapAsync(async (req, res)=>{
-    const id = req.params.id;
-    const {rating, comment} = req.body.review;
 
-    // Joi only validates what comes in the req.body.
-    // anything that we add later wont be checked by Joi.
-
-    const reviewObject = {listing: id, comment, rating};
-    // console.log(reviewObject);
-
-    await Review.create(reviewObject);
-    res.redirect(`/listings/${id}`);
-
-    
-}));
-
-// DELETE COMMENT
-router.post('/:id/deletereview', wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    
-    // think tmr
-    res.redirect(`/listings/${id}`);
-}));
 
 export default router;
