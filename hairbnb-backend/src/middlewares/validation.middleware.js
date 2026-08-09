@@ -8,8 +8,9 @@ export const validateListing = (req,res,next) =>{
 
     if(error){
         const errMsg = error.details.map(el => el.message).join(', ');
-        return next( new apiError(400, error.details));
+        return next( new apiError(400, errMsg));
     }
+    next();
 }
 
 // Review Validator Middleware

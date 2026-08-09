@@ -15,6 +15,8 @@ router.get('/form', (req, res) => {
 router.post('/submit',validateListing, wrapAsync(async (req, res) => {
     await Listing.create(req.body);
     console.log("submitted");
+    // flash message
+    req.flash('success', 'New listing created successfully');
     res.redirect('/listings');
 }));
 
@@ -45,6 +47,8 @@ router.get('/:id/edit', wrapAsync(async (req, res) => {
     if(!ad){
         throw new apiError(404,'Listing Not Found');
     }
+
+    
     res.render("editForm.ejs", { ad });
     console.log(ad);
 }));
@@ -53,6 +57,9 @@ router.post('/:id/edit', wrapAsync(async (req, res) => {
     const { id } = req.params;
 
     await Listing.findByIdAndUpdate(id, req.body);
+    // flash message
+    req.flash('success', 'updated successfully');
+
     res.redirect(`/listings/${id}`); 
 }));
 
@@ -61,6 +68,9 @@ router.post('/:id/edit', wrapAsync(async (req, res) => {
 router.post('/:id/delete', wrapAsync(async (req, res) => {
     const { id } = req.params;
     await Listing.findByIdAndDelete(id);
+
+    // flash message
+    req.flash('success', 'Deleted successfully');
 
     res.redirect('/listings');
 }));
