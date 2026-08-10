@@ -1,0 +1,130 @@
+<%- layout("/layouts/boilerplate") %>
+
+<!-- Flash Alerts Container -->
+<div class="container mt-3" style="max-width: 480px;">
+  <% if (error && error.length) { %>
+    <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+      <%= error %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+
+  <% if (success && success.length) { %>
+    <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+      <%= success %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+</div>
+
+<style>
+  .auth-container {
+    max-width: 460px;
+    margin: 3rem auto;
+  }
+
+  .auth-card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    padding: 2.5rem;
+  }
+
+  .auth-brand-icon {
+    font-size: 2.5rem;
+    color: #fe424d;
+  }
+
+  .auth-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  .form-control-custom {
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ced4da;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .form-control-custom:focus {
+    border-color: #fe424d;
+    box-shadow: 0 0 0 0.2rem rgba(254, 66, 77, 0.15);
+  }
+
+  .btn-auth-submit {
+    background-color: #fe424d;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+
+  .btn-auth-submit:hover {
+    background-color: #e0323d;
+    color: #ffffff;
+    transform: translateY(-1px);
+  }
+</style>
+
+<div class="container auth-container">
+  <div class="auth-card">
+    
+    <!-- Header -->
+    <div class="text-center mb-4">
+      <i class="fa-solid fa-compass auth-brand-icon mb-2"></i>
+      <h2 class="auth-title">Welcome Back</h2>
+      <p class="text-muted fs-6">Log in to manage your listings and reviews</p>
+    </div>
+
+    <!-- Login Form -->
+    <form action="/login" method="POST" novalidate class="needs-validation">
+      
+      <!-- Username Field -->
+      <div class="mb-3">
+        <label for="username" class="form-label fw-semibold text-secondary">Username</label>
+        <input 
+          type="text" 
+          name="username" 
+          id="username" 
+          class="form-control form-control-custom" 
+          placeholder="Enter your username" 
+          required 
+          autofocus
+        />
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-4">
+        <label for="password" class="form-label fw-semibold text-secondary">Password</label>
+        <input 
+          type="password" 
+          name="password" 
+          id="password" 
+          class="form-control form-control-custom" 
+          placeholder="Enter your password" 
+          required
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-auth-submit mb-3">
+        Log In
+      </button>
+
+      <!-- Footer Link -->
+      <div class="text-center mt-3">
+        <span class="text-muted">Don't have an account?</span>
+        <a href="/signup" class="fw-semibold text-decoration-none" style="color: #fe424d;">Sign up</a>
+      </div>
+
+    </form>
+
+  </div>
+</div>

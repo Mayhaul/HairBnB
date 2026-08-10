@@ -6,8 +6,11 @@ import ejsMate from "ejs-mate";
 import session from 'express-session';
 import flash from 'connect-flash';
 import routes from './routes/index.js'; 
+import passport from 'passport'
+import LocalStratergy from 'passport-local'
+import User from './models/User.model.js'
 
-// ---------------- MIDDLEWARE ----------------
+// ---------------- MIDDLEWARES ----------------
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -24,6 +27,21 @@ app.use(session({
 
 app.use(flash());
 
+// initializing passport
+app.use(passport.initialize());
+
+passport.use(new LocalStratergy(User.authenticate()));
+
+// stores user related info in session while the session is valid.
+passport.serializeUser(User.serializeUser());
+
+// removes all the stored data of user from session.
+passport.deserializeUser(User.deserializeUser());
+
+
+
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -33,17 +51,32 @@ app.set('views', path.join(__dirname,'views'));
 app.engine("ejs", ejsMate);
 
 
-app.use((req,res,next)=>{
-    res.locals.success = req.flash('success');
-    next();
-})
+// Middleware to pass flash messages to all templates automatically
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  res.locals.currUser = req.user || null;
+  next();
+});
 
 app.get('/',(req,res)=>{
     
     res.redirect("/listings");
 })
 
-app.use('/',routes);
+app.get('/demo', async (req,res)=>{
+    let demoUser = new User({
+        email: "xyz@example.com",
+        username: 'mayhaul'
+        })
 
+    const Demo = await User.register(demoUser,'1234');
+
+    res.send(Demo);
+})
+
+
+
+app.use('/',routes);
 
 export default app;

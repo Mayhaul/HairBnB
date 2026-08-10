@@ -28,7 +28,10 @@
     "express-session": "^1.19.0",
     "joi": "^18.2.3",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.3.1"
+    "mongoose": "^8.3.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^9.1.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

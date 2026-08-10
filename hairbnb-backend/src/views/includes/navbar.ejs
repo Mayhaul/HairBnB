@@ -1,44 +1,139 @@
 <style>
-  .btn-search{
+  /* Navbar Base */
+  .custom-navbar {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    padding: 0.75rem 1rem;
+  }
+
+  .navbar-brand-icon {
+    font-size: 1.8rem;
+    color: #fe424d;
+    transition: transform 0.2s ease;
+  }
+
+  .navbar-brand:hover .navbar-brand-icon {
+    transform: rotate(15deg);
+  }
+
+  /* Nav Links */
+  .nav-link-custom {
+    font-weight: 500;
+    color: #222222 !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 20px;
+    transition: background-color 0.2s ease;
+  }
+
+  .nav-link-custom:hover {
+    background-color: #f7f7f7;
+    color: #fe424d !important;
+  }
+
+  /* Search Bar */
+  .search-container {
+    position: relative;
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .search-inp {
+    border-radius: 30px;
+    padding: 0.55rem 1.25rem;
+    font-size: 0.95rem;
+    border: 1px solid #dddddd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .search-inp:focus {
+    border-color: #fe424d;
+    box-shadow: 0 3px 12px rgba(254, 66, 77, 0.15);
+  }
+
+  .btn-search {
     background-color: #fe424d;
-    color: #fff;
+    color: #ffffff;
     border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+    padding: 0.4rem 1.2rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
   }
-  .btn-search:hover{
-    background-color: #fe424d;
-    color: #fff;
+
+  .btn-search:hover {
+    background-color: #e0323d;
+    color: #ffffff;
+    transform: scale(1.02);
   }
-  .btn-search i{
+
+  .btn-search i {
     display: inline;
-    margin-right: 0.5rem;
+    margin-right: 0.4rem;
   }
-  .search-inp{
-    border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
-    font-size: 1rem;
+
+  /* Auth Action Buttons */
+  .btn-nav-outline {
+    border: 1px solid #dddddd;
+    border-radius: 20px;
+    padding: 0.4rem 1rem;
+    font-weight: 500;
+    color: #222222;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-nav-outline:hover {
+    border-color: #222222;
+    background-color: #222222;
+    color: #ffffff;
   }
 </style>
 
+<nav class="navbar navbar-expand-md custom-navbar border-bottom sticky-top">
+  <div class="container-fluid max-width-wrapper">
+    
+    <!-- Brand Logo -->
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/listings">
+      <i class="fa-solid fa-compass navbar-brand-icon"></i>
+      <span class="fw-bold fs-5 d-none d-sm-inline" style="color: #222;">HairBnB</span>
+    </a>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/listings"></a> <i class="fa-solid fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Mobile Toggler -->
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/listings">Explore</a>
-  
+      
+      <!-- Left Navigation -->
+      <div class="navbar-nav me-auto">
+        <a class="nav-link nav-link-custom" href="/listings">Explore</a>
       </div>
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-          <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations" aria-label="Search"/>
-          <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+
+      <!-- Center Search Bar -->
+      <div class="navbar-nav mx-auto my-2 my-md-0 search-container">
+        <form class="d-flex w-100 align-items-center gap-2" role="search" action="/listings" method="GET">
+          <input class="form-control search-inp" type="search" name="q" placeholder="Search destinations..." aria-label="Search"/>
+          <button class="btn btn-search d-flex align-items-center" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>Search
+          </button>
         </form>
       </div>
-      
+
+      <!-- Right Auth Navigation -->
+      <div class="navbar-nav ms-auto align-items-md-center gap-2 mt-2 mt-md-0">
+        <% if (typeof currUser !== 'undefined' && currUser) { %>
+          <a class="nav-link nav-link-custom fw-semibold" href="/listings/form">+ Add New Listing</a>
+          <span class="text-muted d-none d-lg-inline" style="font-size: 0.85rem;">Hi, <%= currUser.username %></span>
+          <a class="btn btn-nav-outline ms-md-2" href="/logout">Log out</a>
+        <% } else { %>
+          <a class="nav-link nav-link-custom" href="/signup">Sign up</a>
+          <a class="btn btn-nav-outline ms-md-1" href="/login">Log in</a>
+        <% } %>
+      </div>
+
     </div>
   </div>
 </nav>

@@ -1,4 +1,5 @@
 <%- layout("/layouts/boilerplate") %>
+
 <% if (success && success.length) { %>
   <div class="alert alert-success alert-dismissible fade show flash-alert" role="alert">
     <%= success %>
@@ -9,39 +10,33 @@
     setTimeout(() => {
       const alertElem = document.querySelector('.flash-alert');
       if (alertElem) {
-        // Option 1: Using Bootstrap's JS API to trigger a smooth fade-out transition
         const bsAlert = bootstrap.Alert.getOrCreateInstance(alertElem);
         bsAlert.close();
       }
     }, 3000);
   </script>
 <% } %>
+
 <style>
-  /* Page Container Layout */
+  /* Base Container */
   .ad-show-container {
-    max-width: 600px;
+    max-width: 1100px;
     margin: 2rem auto;
   }
 
-  /* Card Container */
+  /* Listing Main Card */
   .ad-card {
     background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .ad-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  }
-
-  /* Image Styling */
   .ad-image-container {
     width: 100%;
-    height: 300px;
-    background-color: #e9ecef;
+    height: 380px;
+    background-color: #f1f3f5;
     overflow: hidden;
   }
 
@@ -49,153 +44,189 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
-  }
-
-  /* Content Section */
-  .ad-content {
-    padding: 24px;
   }
 
   .ad-title {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
     font-weight: 700;
     color: #1a1a1a;
-    margin-bottom: 8px;
   }
 
   .ad-price {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     font-weight: 700;
-    color: #2e7d32; /* Accent green color */
-    margin-bottom: 16px;
+    color: #fe424d; /* Brand Accent */
   }
 
-  .ad-description {
-    color: #555;
-    margin-bottom: 20px;
-    font-size: 1rem;
-    line-height: 1.5;
+  /* Review Section Card */
+  .review-card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
   }
 
-  /* Metadata Section */
-  .ad-meta {
+  /* Star Rating Styles */
+  .star-rating {
     display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    color: #777;
-    border-top: 1px solid #eee;
-    padding-top: 16px;
-    margin-bottom: 20px;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 4px;
   }
 
-  .ad-location-icon {
-    margin-right: 6px;
+  .star-rating input {
+    display: none;
   }
 
-  /* Action Buttons Section */
-  .action-buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
+  .star-rating label {
+    font-size: 1.5rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s ease;
   }
 
-  .btn-custom {
-    border-radius: 8px;
-    padding: 8px 20px;
-    font-weight: 600;
-    transition: opacity 0.2s ease;
+  .star-rating input:checked ~ label,
+  .star-rating label:hover,
+  .star-rating label:hover ~ label {
+    color: #ffb400;
   }
 
-  .btn-custom:hover {
-    opacity: 0.9;
+  /* Review Bubble Badge */
+  .review-item {
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #eee;
   }
 </style>
-<!-- BootStrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <div class="container ad-show-container">
   
   <!-- Back Button -->
-  <a href="/listings" class="btn btn-outline-secondary mb-3 btn-custom">
-    &larr; Go Back
+  <a href="/listings" class="btn btn-outline-secondary mb-3 rounded-pill px-3">
+    &larr; Back to Listings
   </a>
 
-  <!-- Listing Card -->
-  <article class="ad-card ">
-    <% if (ad.image && ad.image.url) { %>
-      <div class="ad-image-container">
-        <img class="ad-image" src="<%= ad.image.url %>" alt="<%= ad.title %>">
-      </div>
-    <% } %>
+  <!-- 2-Column Responsive Grid -->
+  <div class="row g-4">
+    
+    <!-- LEFT COLUMN: Listing Details -->
+    <div class="col-lg-7">
+      <article class="ad-card">
+        <% if (ad.image && ad.image.url) { %>
+          <div class="ad-image-container">
+            <img class="ad-image" src="<%= ad.image.url %>" alt="<%= ad.title %>">
+          </div>
+        <% } %>
 
-    <div class="ad-content">
-      <h1 class="ad-title"><%= ad.title %></h1>
-      <p class="ad-price">&#8377; <%= ad.price.toLocaleString("en-IN") %></p>
-      <p class="ad-description"><%= ad.description %></p>
+        <div class="p-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h1 class="ad-title mb-0"><%= ad.title %></h1>
+            <span class="ad-price">&#8377; <%= ad.price.toLocaleString("en-IN") %> <small class="text-muted fw-normal" style="font-size: 0.9rem;">/ night</small></span>
+          </div>
 
-      <div class="ad-meta">
-        <span class="ad-location-icon">📍</span>
-        <span><%= ad.location %>, <%= ad.country %></span>
-      </div>
+          <p class="text-muted mb-3">
+            📍 <%= ad.location %>, <%= ad.country %>
+          </p>
 
-      <!-- Action Buttons Row -->
-      <div class="action-buttons">
-        <a href="/listings/<%= ad._id %>/edit" class="btn btn-dark btn-custom">
-          Edit Ad
-        </a>
+          <p class="text-secondary mb-4" style="line-height: 1.6;">
+            <%= ad.description %>
+          </p>
 
-        <form action="/listings/<%= ad._id %>/delete" method="POST" class="d-inline">
-          <button type="submit" class="btn btn-danger btn-custom">
-            Delete
-          </button>
+          <hr class="my-4" style="opacity: 0.1;">
 
-          <!-- Add review -->
+          <!-- Action Buttons -->
+          <div class="d-flex justify-content-between align-items-center">
+            <a href="/listings/<%= ad._id %>/edit" class="btn btn-dark px-4 rounded-3">
+              Edit Listing
+            </a>
+
+            <form action="/listings/<%= ad._id %>/delete" method="POST" class="d-inline">
+              <button type="submit" class="btn btn-outline-danger px-4 rounded-3">
+                Delete Listing
+              </button>
+            </form>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- RIGHT COLUMN: Reviews & Review Form -->
+    <div class="col-lg-5">
+      
+      <!-- Leave a Review Form -->
+      <div class="review-card mb-4">
+        <h4 class="fw-bold mb-3">Leave a Review</h4>
+        
+        <form action="/listings/<%= ad._id %>/reviews" method="POST">
+          <!-- Interactive Star Rating -->
+          <div class="mb-3">
+            <label class="form-label d-block text-muted mb-1">Rating</label>
+            <div class="star-rating">
+              <input type="radio" id="star5" name="review[rating]" value="5" />
+              <label for="star5" title="5 stars">★</label>
+
+              <input type="radio" id="star4" name="review[rating]" value="4" />
+              <label for="star4" title="4 stars">★</label>
+
+              <input type="radio" id="star3" name="review[rating]" value="3" />
+              <label for="star3" title="3 stars">★</label>
+
+              <input type="radio" id="star2" name="review[rating]" value="2" />
+              <label for="star2" title="2 stars">★</label>
+
+              <input type="radio" id="star1" name="review[rating]" value="1" checked />
+              <label for="star1" title="1 star">★</label>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="reviewTextBox" class="form-label text-muted">Comments</label>
+            <textarea 
+              name="review[comment]" 
+              id="reviewTextBox" 
+              class="form-control rounded-3" 
+              rows="3" 
+              placeholder="How was your experience?" 
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-danger w-100 rounded-3">Post Review</button>
         </form>
       </div>
-      <hr class="mt-4" style="opacity: 0.1;">
-    </div>
-    <h4 class="ms-3">Leave a review</h4>
-    <div class="p-3">
-      <form action="/listings/<%= ad._id %>/reviews" method="post">
-        <div>
-          <label for="rating"> Rating ->
-            <br>
-            <input type="range" min="0" max="5" name="review[rating]" id="rating" class="form-range">
-          </label>
-        </div>
-        <div class="mb-3">
-          <label for="reviewTextBox" name="" class="form-label">Review</label>
-          <textarea name="review[comment]" id="reviewTextBox" class="form-control" rows="3" placeholder="Write a review :)"></textarea>
-        </div>
-        <button type="submit" class="btn btn-success">Post!</button>
-      </form>
-    </div>
 
-   <!-- All Reviews Section -->
-    <hr class="mx-3" style="opacity: 0.1;">
-    <h4 class="ms-3 mb-3">All Reviews</h4>
-    <div class="px-3 pb-3">
-      <% if (review && review.length > 0) { %>
-        <div class="list-group">
-          <% for (let r of review) { %>
-            <div class="list-group-item mb-2 border rounded">
-              <div class="d-flex w-100 justify-content-between align-items-center mb-1">
-                <h6 class="mb-0 text-primary">Rating: <%= r.rating %> / 5 ⭐</h6>
+      <!-- All Reviews List -->
+      <div class="review-card">
+        <h4 class="fw-bold mb-3">All Reviews (<%= review ? review.length : 0 %>)</h4>
+        
+        <% if (review && review.length > 0) { %>
+          <div class="d-flex flex-column gap-3">
+            <% for (let r of review) { %>
+              <div class="review-item p-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="fw-bold text-warning" style="font-size: 1.1rem;">
+                    <% for(let i=0; i < r.rating; i++) { %>★<% } %><% for(let i=r.rating; i < 5; i++) { %>☆<% } %>
+                  </span>
+
+                  <!-- Delete Review Button -->
+                  <form action="/listings/<%= ad._id %>/reviews/<%= r._id %>?_method=DELETE" method="POST" class="d-inline">
+                    <button class="btn btn-link text-danger p-0 border-0" type="submit" title="Delete Review">
+                      <small>Delete</small>
+                    </button>
+                  </form>
+                </div>
+
+                <p class="mb-0 text-secondary" style="font-size: 0.95rem;"><%= r.comment %></p>
               </div>
-              <p class="mb-1 text-secondary"><%= r.comment %></p>
-               <form action="/listings/<%= ad._id %>/reviews/<%= r._id %>" method="post">
-                  <button class="btn btn-danger" type="submit"> Delete </button>
-               </form>
-            </div>
-           
-          <% } %>
-        </div>
-      <% } else { %>
-        <p class="text-muted ms-1">No reviews yet for this listing.</p>
-      <% } %>
-    </div>
-  </article>
+            <% } %>
+          </div>
+        <% } else { %>
+          <p class="text-muted mb-0">No reviews yet for this listing.</p>
+        <% } %>
+      </div>
 
+    </div>
+
+  </div>
 </div>

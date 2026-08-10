@@ -1,4 +1,5 @@
 <%- layout("/layouts/boilerplate") %>
+
 <% if (success && success.length) { %>
   <div class="alert alert-success alert-dismissible fade show flash-alert" role="alert">
     <%= success %>
@@ -9,44 +10,71 @@
     setTimeout(() => {
       const alertElem = document.querySelector('.flash-alert');
       if (alertElem) {
-        // Option 1: Using Bootstrap's JS API to trigger a smooth fade-out transition
         const bsAlert = bootstrap.Alert.getOrCreateInstance(alertElem);
         bsAlert.close();
       }
     }, 3000);
   </script>
 <% } %>
+
 <style>
   /* Section Layout */
   .listings-container {
     max-width: 1200px;
-    margin: 2rem auto;
+    margin: 2.5rem auto;
   }
 
+  /* Modern Hero / Header Bar */
   .listings-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eaeaea;
   }
 
   .page-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #111;
-    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
   }
 
-  /* Responsive Grid */
+  .page-subtitle {
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin-top: 4px;
+  }
+
+  .btn-brand-accent {
+    background-color: #fe424d;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 12px rgba(254, 66, 77, 0.25);
+  }
+
+  .btn-brand-accent:hover {
+    background-color: #e0323d;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(254, 66, 77, 0.35);
+  }
+
+  /* Grid Layout */
   .listings-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
+    gap: 28px;
     padding: 0;
     list-style: none;
   }
 
-  /* Card Link */
+  /* Card Styling & Hover Effects */
   .listing-card-link {
     text-decoration: none;
     color: inherit;
@@ -54,48 +82,48 @@
     height: 100%;
   }
 
-  /* Card Container */
   .listing-card {
     background: #ffffff;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    border: 1px solid #eef0f2;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
   }
 
   .listing-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
   }
 
-  /* Fixed Image Container with Aspect Ratio */
+  /* Aspect Ratio Fixed Image Box */
   .card-img-container {
     width: 100%;
-    height: 200px; /* Fixed height for image area */
-    background-color: #e9ecef;
+    height: 220px;
+    background-color: #f1f3f5;
     overflow: hidden;
+    position: relative;
   }
 
-  /* Scaled Image */
   .card-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Keeps image aspect ratio without stretching */
+    object-fit: cover;
     display: block;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
   }
 
   .listing-card:hover .card-img {
-    transform: scale(1.05); /* Subtle zoom effect on hover */
+    transform: scale(1.06);
   }
 
   /* Card Body Content */
   .card-body-content {
-    padding: 16px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -103,46 +131,76 @@
   }
 
   .listing-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 8px;
-  }
-
-  .listing-price {
+    font-size: 1.15rem;
     font-weight: 700;
-    color: #2e7d32;
-    margin-bottom: 12px;
+    color: #111;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .listing-action {
+  .listing-location {
     font-size: 0.875rem;
-    font-weight: 600;
-    color: #0066cc;
+    color: #6c757d;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
     gap: 4px;
   }
 
+  .listing-price {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fe424d;
+    margin-bottom: 0;
+  }
+
+  .listing-price-unit {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #6c757d;
+  }
+
+  .listing-action {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s ease;
+  }
+
+  .listing-card:hover .listing-action {
+    color: #fe424d;
+  }
+
   /* Empty state styling */
   .empty-state {
     text-align: center;
-    padding: 60px 20px;
-    background: #fff;
-    border-radius: 12px;
-    color: #666;
+    padding: 80px 20px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px dashed #ced4da;
+    color: #6c757d;
   }
 </style>
 
 <div class="container listings-container">
   
+  <!-- Header Bar -->
   <div class="listings-header">
-    <h1 class="page-title">All Listings</h1>
-    <a href="/listings/form" class="btn btn-danger btn-custom">
+    <div>
+      <h1 class="page-title">Explore Places</h1>
+      <p class="page-subtitle">Discover unique stays and experiences worldwide</p>
+    </div>
+    <a href="/listings/form" class="btn btn-brand-accent">
       + Add New Listing
     </a>
   </div>
 
+  <!-- Listings Grid -->
   <% if (listings && listings.length > 0) { %>
     <ul class="listings-grid">
       <% listings.forEach(listing => { %>
@@ -162,13 +220,24 @@
               <!-- Content Area -->
               <div class="card-body-content">
                 <div>
-                  <h2 class="listing-title"><%= listing.title %></h2>
-                  <h9 ><%= listing.location%>, <%= listing.country %></h9>
-                  <% if (listing.price) { %>
-                    <p class="listing-price">&#8377; <%= listing.price.toLocaleString("en-IN") %></p>
-                  <% } %>
+                  <h2 class="listing-title" title="<%= listing.title %>"><%= listing.title %></h2>
+                  <div class="listing-location">
+                    <span>📍</span>
+                    <span><%= listing.location %>, <%= listing.country %></span>
+                  </div>
                 </div>
-                <span class="listing-action">View Listing &rarr;</span>
+
+                <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-2">
+                  <div>
+                    <% if (listing.price) { %>
+                      <p class="listing-price">
+                        &#8377; <%= listing.price.toLocaleString("en-IN") %>
+                        <span class="listing-price-unit">/ night</span>
+                      </p>
+                    <% } %>
+                  </div>
+                  <span class="listing-action">Explore &rarr;</span>
+                </div>
               </div>
 
             </article>
@@ -178,8 +247,11 @@
     </ul>
   <% } else { %>
     <div class="empty-state">
-      <h3>No listings found.</h3>
-      <p class="text-muted">Be the first to add a new place!</p>
+      <h3 class="fw-bold mb-2">No listings found</h3>
+      <p class="text-muted mb-4">Be the first to share a place with the community!</p>
+      <a href="/listings/form" class="btn btn-brand-accent">
+        Create a Listing
+      </a>
     </div>
   <% } %>
 
