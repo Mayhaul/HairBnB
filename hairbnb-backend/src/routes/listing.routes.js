@@ -6,13 +6,11 @@ import wrapAsync from "../utils/asyncHandler.js";
 import Listing from '../models/Listing.model.js'
 import Review from "../models/review.model.js";
 import apiError from "../utils/ApiError.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
 
 
-router.get('/form', (req, res) => {
-    if(!req.isAuthenticated()){
-        req.flash('error', 'User must Login or Sign up before creating a post');
-        res.redirect('/signup');
-    }
+router.get('/form',authMiddleware, (req, res) => {
+    
     res.render('form.ejs');
 });
 
@@ -44,7 +42,7 @@ router.get('/:id', wrapAsync(async (req, res) => {
 }));
 
 // Edit listing
-router.get('/:id/edit', wrapAsync(async (req, res) => {
+router.get('/:id/edit',authMiddleware,validateListing,wrapAsync(async (req, res) => {
     const id = req.params.id;
     const ad = await Listing.findById(id);
 
@@ -69,7 +67,7 @@ router.post('/:id/edit', wrapAsync(async (req, res) => {
 
 
 // Delete
-router.post('/:id/delete', wrapAsync(async (req, res) => {
+router.post('/:id/delete',authMiddleware,wrapAsync(async (req, res) => {
     const { id } = req.params;
     await Listing.findByIdAndDelete(id);
 

@@ -1,19 +1,14 @@
 import express from "express";
-
 // MUST include mergeParams: true to access req.params.id from the parent mount path
 const router = express.Router({ mergeParams: true });
 
+import authMiddleware from "../middlewares/auth.middleware.js";
 import { validateListing, validateReview } from "../middlewares/validation.middleware.js";
 import Review from "../models/review.model.js";
 import wrapAsync from "../utils/asyncHandler.js";
 
 // Add Review
-router.post('/',validateReview, wrapAsync(async (req, res)=>{
-
-    if(!req.isAuthenticated()){
-        req.flash('error', 'User must login or Sign up before making a review!');
-        res.redirect('/signup');
-    }
+router.post('/',authMiddleware,validateReview, wrapAsync(async (req, res)=>{
 
     const id = req.params.id;
     const {rating, comment} = req.body.review;
@@ -31,7 +26,7 @@ router.post('/',validateReview, wrapAsync(async (req, res)=>{
 }));
 
 // DELETE Review
-router.post('/:reviewId', wrapAsync(async (req, res) => {
+router.post('/:reviewId',authMiddleware, wrapAsync(async (req, res) => {
     const { id , reviewId } = req.params;
     
     console.log(reviewId);
