@@ -63,4 +63,24 @@ router.get('/logout', (req, res, next) => {
   });
 });
 
+// Start Google authentication
+router.get(
+    "/auth/google",
+    passport.authenticate("google", {
+        scope: ["profile", "email"]
+    })
+);
+
+// Google redirects here after authentication
+router.get(
+    "/auth/google/callback",
+    passport.authenticate("google", {
+        failureRedirect: "/login"
+    }),
+    (req, res) => {
+        res.redirect("/dashboard");
+    }
+);
+
+
 export default router;

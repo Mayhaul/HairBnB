@@ -7,11 +7,15 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import routes from './routes/index.js'; 
 import passport from 'passport'
-import LocalStratergy from 'passport-local'
+import LocalStrategy from 'passport-local'
 import User from './models/User.model.js'
+import GoogleStrategy from  'passport-google-oauth20'
+import dotenv from 'dotenv'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+dotenv.config();
+
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'views'));
@@ -39,8 +43,37 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStratergy(User.authenticate()));
+passport.use(new LocalStrategy(User.authenticate()));
+passport.use(
+    new GoogleStrategy(
+        {
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: "/auth/google/callback"
+        },
+        async (accessToken, refreshToken, profile, done) => {
+            try {
+                // Find existing user
+                let user = await User.findOne({
+                    googleId: profile.id
+                });
 
+                // Create user if they don't exist
+                if (!user) {
+                    user = await User.create({
+                        googleId: profile.id,
+                        username: profile.displayName,
+                        email: profile.emails?.[0]?.value
+                    });
+                }
+
+                return done(null, user);
+            } catch (err) {
+                return done(err, null);
+            }
+        }
+    )
+);
 // stores user related info in session while the session is valid.
 passport.serializeUser(User.serializeUser());
 
@@ -53,6 +86,7 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.currUser = req.user; // Passport sets req.user when logged in
+  console.log(req.user);
   next();
 });
 
