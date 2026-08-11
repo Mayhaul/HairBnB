@@ -10,6 +10,14 @@ import passport from 'passport'
 import LocalStratergy from 'passport-local'
 import User from './models/User.model.js'
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname,'views'));
+
+app.engine("ejs", ejsMate);
+
 // ---------------- MIDDLEWARES ----------------
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -29,33 +37,22 @@ app.use(flash());
 
 // initializing passport
 app.use(passport.initialize());
+app.use(passport.session());
 
 passport.use(new LocalStratergy(User.authenticate()));
 
 // stores user related info in session while the session is valid.
 passport.serializeUser(User.serializeUser());
 
-// removes all the stored data of user from session.
+// retrieves the user from the stored info in the session.
 passport.deserializeUser(User.deserializeUser());
-
-
-
-
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname,'views'));
-
-app.engine("ejs", ejsMate);
 
 
 // Middleware to pass flash messages to all templates automatically
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
-  res.locals.currUser = req.user || null;
+  res.locals.currUser = req.user; // Passport sets req.user when logged in
   next();
 });
 

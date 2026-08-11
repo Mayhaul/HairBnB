@@ -12,16 +12,27 @@ router.get('/signup',  (req, res)=>{
 })
 
 router.post('/signup', wrapAsync(async (req, res)=>{
-    const {username, email, password} = req.body;
+    
+    try {
+        const {username, email, password} = req.body;
 
     const user = new User({
         username: username,
         email: email
     });
 
-    await User.register(user,password);
+    const registeredUser = await User.register(user,password);
 
-    res.redirect('/');
+    // Log the user in after successful registration
+    req.login(registeredUser, (err) => {
+      if (err) return next(err);
+      req.flash('success', 'Welcome to HairBnB!');
+      res.redirect('/listings');
+    });
+  } catch (e) {
+    req.flash('error', e.message);
+    res.redirect('/signup');
+  }
 }))
 
 // Logging an existing user
@@ -37,8 +48,19 @@ router.post('/signup', wrapAsync(async (req, res)=>{
     }
     ),
      wrapAsync( async(req, res)=>{
-        res.send('Hello ji')
+        console.log(res.locals.currUser);
+        res.redirect('/listings');
  }));
 
+// Logout
+router.get('/logout', (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    req.flash('success', 'You are logged out!');
+    res.redirect('/listings');
+  });
+});
 
 export default router;
