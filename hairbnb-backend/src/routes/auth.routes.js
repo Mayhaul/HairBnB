@@ -2,7 +2,7 @@ import express from 'express'
 import User from '../models/User.model.js'
 import wrapAsync from '../utils/asyncHandler.js';
 import passport from 'passport';
-
+import {authMiddleware, saveRedirectUrl} from '../middlewares/auth.middleware.js'
 const router = express.Router();
 
 
@@ -11,7 +11,7 @@ router.get('/signup',  (req, res)=>{
     res.render('signup.ejs');
 })
 
-router.post('/signup', wrapAsync(async (req, res)=>{
+router.post('/signup',saveRedirectUrl, wrapAsync(async (req, res)=>{
     
     try {
         const {username, email, password} = req.body;
@@ -31,7 +31,7 @@ router.post('/signup', wrapAsync(async (req, res)=>{
     });
   } catch (e) {
     req.flash('error', e.message);
-    res.redirect('/signup');
+    res.redirect(res.locals.redirectUrl);
   }
 }))
 
@@ -42,6 +42,7 @@ router.post('/signup', wrapAsync(async (req, res)=>{
 
  router.post(
     '/login',
+    saveRedirectUrl,
     passport.authenticate('local',{
         failureRedirect: '/login',
         failureFlash: true
@@ -49,7 +50,8 @@ router.post('/signup', wrapAsync(async (req, res)=>{
     ),
      wrapAsync( async(req, res)=>{
         console.log(res.locals.currUser);
-        res.redirect('/listings');
+        let redirectUrl = res.locals.redirectUrl || '/listings';
+        res.redirect(redirectUrl);
  }));
 
 // Logout

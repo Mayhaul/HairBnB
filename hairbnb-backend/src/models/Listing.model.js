@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const listingModel = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     title : {
         type: String,
         required: true

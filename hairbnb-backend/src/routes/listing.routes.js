@@ -6,7 +6,7 @@ import wrapAsync from "../utils/asyncHandler.js";
 import Listing from '../models/Listing.model.js'
 import Review from "../models/review.model.js";
 import apiError from "../utils/ApiError.js";
-import authMiddleware from "../middlewares/auth.middleware.js";
+import {authMiddleware} from "../middlewares/auth.middleware.js";
 
 
 router.get('/form',authMiddleware, (req, res) => {
@@ -35,7 +35,7 @@ router.get('/:id', wrapAsync(async (req, res) => {
         throw new apiError(404,'Listing Not Found');
     }
 
-    const review = await Review.find({listing: req.params.id});
+    const review = await Review.find({listing: req.params.id}).populate('user');
 
     res.render("ad.ejs", { ad, review });
     // console.log(ad);
