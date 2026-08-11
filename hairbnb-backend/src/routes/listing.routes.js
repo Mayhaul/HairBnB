@@ -9,6 +9,10 @@ import apiError from "../utils/ApiError.js";
 
 
 router.get('/form', (req, res) => {
+    if(!req.isAuthenticated()){
+        req.flash('error', 'User must Login or Sign up before creating a post');
+        res.redirect('/signup');
+    }
     res.render('form.ejs');
 });
 

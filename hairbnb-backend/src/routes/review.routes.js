@@ -9,6 +9,12 @@ import wrapAsync from "../utils/asyncHandler.js";
 
 // Add Review
 router.post('/',validateReview, wrapAsync(async (req, res)=>{
+
+    if(!req.isAuthenticated()){
+        req.flash('error', 'User must login or Sign up before making a review!');
+        res.redirect('/signup');
+    }
+
     const id = req.params.id;
     const {rating, comment} = req.body.review;
 
