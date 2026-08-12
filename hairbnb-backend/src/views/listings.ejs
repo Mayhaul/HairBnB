@@ -218,7 +218,11 @@
               <!-- Content Area -->
               <div class="card-body-content">
                 <div>
-                  <h2 class="listing-title" title="<%= listing.title %>"><%= listing.title %></h2>
+                  <div style="display: flex; flex-direction: row; justify-content:space-between;">
+                        <h2 class="listing-title" title="<%= listing.title %>"><%= listing.title %></h2> 
+                  <p> <%= listing.user ? listing.user.username : 'Anonymous' %>  </p>
+                  </div>
+                  
                   <div class="listing-location">
                     <span>📍</span>
                     <span><%= listing.location %>, <%= listing.country %></span>

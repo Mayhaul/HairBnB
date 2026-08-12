@@ -86,7 +86,7 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.currUser = req.user; // Passport sets req.user when logged in
-  console.log(req.user);
+//   console.log(req.user);
   next();
 });
 

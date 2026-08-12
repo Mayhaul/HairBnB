@@ -20,7 +20,7 @@ export  function authMiddleware(req, res, next){
 export  function saveRedirectUrl(req, res, next){
     if(req.session.redirectUrl){
         res.locals.redirectUrl = req.session.redirectUrl;
-        console.log(res.locals.redirectUrl);
+        // console.log(res.locals.redirectUrl);
     }
     next();
 }
@@ -28,7 +28,7 @@ export  function saveRedirectUrl(req, res, next){
 import Review from '../models/Review.model.js'
 
 // Only review owners can delete the review.
-export async function validDeleteReview (req, res, next){
+export async function reviewAuth (req, res, next){
     try{
         // console.log(req.params);
         
@@ -56,4 +56,38 @@ export async function validDeleteReview (req, res, next){
     } catch(e){
         return next(err);
     }
+}
+
+import Listing from '../models/Listing.model.js'
+
+export async function listingAuth(req,res,next){
+    // match the req.user id with the listing user id.
+    try{
+    const listingId = req.params.id;
+    const user = res.locals.currUser._id || req.user._id;
+    
+    const listing = await Listing.findById(listingId);
+    // console.log(user);
+
+    if (!listing) {
+      req.flash('error', 'Listing not found');
+      return res.redirect('/listings');
+    }
+
+    if(!user){
+        req.flash('error', 'User does not exist');
+        return res.redirect(`/listings/${listingId}`);
+    }
+
+    if(!listing.user.equals(user)){
+        req.flash('error', 'You are not authorized to do this');
+        return res.redirect(`/listings/${listingId}`);
+    }else{
+        next();
+        }
+
+    }catch(e){
+        next(e);
+    }
+
 }

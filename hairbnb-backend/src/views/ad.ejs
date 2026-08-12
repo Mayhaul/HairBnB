@@ -120,9 +120,18 @@
         <% } %>
 
         <div class="p-4">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h1 class="ad-title mb-0"><%= ad.title %></h1>
-            <span class="ad-price">&#8377; <%= ad.price.toLocaleString("en-IN") %> <small class="text-muted fw-normal" style="font-size: 0.9rem;">/ night</small></span>
+          <!-- Listing Title, Host Name, and Price Header -->
+          <div class="d-flex justify-content-between align-items-start mb-3 gap-3">
+            <div>
+              <h1 class="ad-title mb-1"><%= ad.title %></h1>
+              <p class="text-muted mb-0 small">
+                Hosted by <strong><%= ad.user ? ad.user.username : 'Owner' %></strong>
+              </p>
+            </div>
+            <div class="text-end flex-shrink-0">
+              <span class="ad-price">&#8377; <%= ad.price ? ad.price.toLocaleString("en-IN") : 0 %></span>
+              <small class="text-muted fw-normal d-block" style="font-size: 0.85rem;">/ night</small>
+            </div>
           </div>
 
           <p class="text-muted mb-3">
@@ -133,20 +142,21 @@
             <%= ad.description %>
           </p>
 
-          <hr class="my-4" style="opacity: 0.1;">
-
-          <!-- Action Buttons -->
-          <div class="d-flex justify-content-between align-items-center">
-            <a href="/listings/<%= ad._id %>/edit" class="btn btn-dark px-4 rounded-3">
-              Edit Listing
-            </a>
-
-            <form action="/listings/<%= ad._id %>/delete" method="POST" class="d-inline">
-              <button type="submit" class="btn btn-outline-danger px-4 rounded-3">
-                Delete Listing
-              </button>
-            </form>
-          </div>
+          <!-- Listing Edit / Delete Controls (Listing Owner Only) -->
+          <% if (typeof currUser !== 'undefined' && currUser && ad.user && ad.user._id.equals(currUser._id)) { %> 
+            <hr class="my-4" style="opacity: 0.1;">  
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="/listings/<%= ad._id %>/edit" class="btn btn-dark px-4 rounded-3">
+                Edit Listing
+              </a>
+              
+              <form action="/listings/<%= ad._id %>/delete" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger px-4 rounded-3">
+                  Delete Listing
+                </button>
+              </form>
+            </div>
+          <% } %>
         </div>
       </article>
     </div>
@@ -154,46 +164,50 @@
     <!-- RIGHT COLUMN: Reviews & Review Form -->
     <div class="col-lg-5">
       
-      <!-- Leave a Review Form -->
+      <!-- Leave a Review Form (Logged-in Users Only) -->
       <div class="review-card mb-4">
         <h4 class="fw-bold mb-3">Leave a Review</h4>
         
-        <form action="/listings/<%= ad._id %>/reviews" method="POST">
-          <!-- Interactive Star Rating -->
-          <div class="mb-3">
-            <label class="form-label d-block text-muted mb-1">Rating</label>
-            <div class="star-rating">
-              <input type="radio" id="star5" name="review[rating]" value="5" />
-              <label for="star5" title="5 stars">★</label>
+        <% if (typeof currUser !== 'undefined' && currUser) { %>
+          <form action="/listings/<%= ad._id %>/reviews" method="POST">
+            <!-- Interactive Star Rating -->
+            <div class="mb-3">
+              <label class="form-label d-block text-muted mb-1">Rating</label>
+              <div class="star-rating">
+                <input type="radio" id="star5" name="review[rating]" value="5" />
+                <label for="star5" title="5 stars">★</label>
 
-              <input type="radio" id="star4" name="review[rating]" value="4" />
-              <label for="star4" title="4 stars">★</label>
+                <input type="radio" id="star4" name="review[rating]" value="4" />
+                <label for="star4" title="4 stars">★</label>
 
-              <input type="radio" id="star3" name="review[rating]" value="3" />
-              <label for="star3" title="3 stars">★</label>
+                <input type="radio" id="star3" name="review[rating]" value="3" />
+                <label for="star3" title="3 stars">★</label>
 
-              <input type="radio" id="star2" name="review[rating]" value="2" />
-              <label for="star2" title="2 stars">★</label>
+                <input type="radio" id="star2" name="review[rating]" value="2" />
+                <label for="star2" title="2 stars">★</label>
 
-              <input type="radio" id="star1" name="review[rating]" value="1" checked />
-              <label for="star1" title="1 star">★</label>
+                <input type="radio" id="star1" name="review[rating]" value="1" checked />
+                <label for="star1" title="1 star">★</label>
+              </div>
             </div>
-          </div>
 
-          <div class="mb-3">
-            <label for="reviewTextBox" class="form-label text-muted">Comments</label>
-            <textarea 
-              name="review[comment]" 
-              id="reviewTextBox" 
-              class="form-control rounded-3" 
-              rows="3" 
-              placeholder="How was your experience?" 
-              required
-            ></textarea>
-          </div>
+            <div class="mb-3">
+              <label for="reviewTextBox" class="form-label text-muted">Comments</label>
+              <textarea 
+                name="review[comment]" 
+                id="reviewTextBox" 
+                class="form-control rounded-3" 
+                rows="3" 
+                placeholder="How was your experience?" 
+                required
+              ></textarea>
+            </div>
 
-          <button type="submit" class="btn btn-danger w-100 rounded-3">Post Review</button>
-        </form>
+            <button type="submit" class="btn btn-danger w-100 rounded-3">Post Review</button>
+          </form>
+        <% } else { %>
+          <p class="text-muted mb-0">Please <a href="/login" class="text-danger fw-bold text-decoration-none">Log in</a> to leave a review.</p>
+        <% } %>
       </div>
 
       <!-- All Reviews List -->
@@ -204,23 +218,35 @@
           <div class="d-flex flex-column gap-3">
             <% for (let r of review) { %>
               <div class="review-item p-3">
+                
+                <!-- Reviewer Header -->
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                  <span class="fw-bold text-warning" style="font-size: 1.1rem;">
-                    <% for(let i=0; i < r.rating; i++) { %>★<% } %><% for(let i=r.rating; i < 5; i++) { %>☆<% } %>
-                  </span>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="fw-bold text-dark" style="font-size: 0.95rem;">
+                      @<%= r.user ? r.user.username : 'Anonymous' %>
+                    </span>
+                  </div>
 
-                  <!-- Delete Review Button -->
-                   <!-- Delete button shall only appear for the currUser logged in. we have stored the currUser in the res.locals -->
-                  <% if(typeof currUser !== 'undefined' && currUser && r.user && r.user._id.equals(currUser._id)) {%>
+                  <!-- Delete Review Button (Review Author Only) -->
+                  <% if (typeof currUser !== 'undefined' && currUser && r.user && r.user._id.equals(currUser._id)) { %>
                     <form action="/listings/<%= ad._id %>/reviews/<%= r._id %>?_method=DELETE" method="POST" class="d-inline">
-                    <button class="btn btn-link text-danger p-0 border-0" type="submit" title="Delete Review">
-                      <small>Delete</small>
-                    </button>
-                      </form>
-                    <% } %>  
+                      <button class="btn btn-link text-danger p-0 border-0 text-decoration-none" type="submit" title="Delete Review">
+                        <small>Delete</small>
+                      </button>
+                    </form>
+                  <% } %>
                 </div>
-                <p><%= r.user ? r.user.username : 'Anonymous' %></p>
+
+                <!-- Stars -->
+                <div class="mb-2">
+                  <span class="fw-bold text-warning" style="font-size: 1rem;">
+                    <% for(let i = 0; i < r.rating; i++) { %>★<% } %><% for(let i = r.rating; i < 5; i++) { %>☆<% } %>
+                  </span>
+                </div>
+
+                <!-- Comment Text -->
                 <p class="mb-0 text-secondary" style="font-size: 0.95rem;"><%= r.comment %></p>
+
               </div>
             <% } %>
           </div>

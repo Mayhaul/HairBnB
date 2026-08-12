@@ -1,7 +1,11 @@
 import Joi from "joi";
 
 export const ListingSchema = Joi.object({
-    
+        user: Joi.string()
+                    .hex()
+                    .length(24)
+                    .optional()
+                    .allow(null, ''),
         title: Joi.string().required(),
         description: Joi.string().required(),
         location: Joi.string().required(),

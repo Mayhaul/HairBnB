@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const listingModel = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     title : {
         type: String,
@@ -31,4 +32,4 @@ const listingModel = new mongoose.Schema({
     country : String
 });
 
-export default mongoose.model('Listing',listingModel);
+export default mongoose.Model.Listing || mongoose.model('Listing',listingModel);
