@@ -25,6 +25,8 @@ const reviewSchema = new mongoose.Schema({
     }
 });
 
+// I dont completely get why we had to do this. the error i got was regarding 'u cannot change the Review model again' 
+// gemini said it was because of trying to create the model multiple times even after the model was alr made.
 const Review = mongoose.models.Review || mongoose.model('Review', reviewSchema);
 
 export default Review;
