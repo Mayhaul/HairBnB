@@ -210,11 +210,14 @@
                   </span>
 
                   <!-- Delete Review Button -->
-                  <form action="/listings/<%= ad._id %>/reviews/<%= r._id %>?_method=DELETE" method="POST" class="d-inline">
+                   <!-- Delete button shall only appear for the currUser logged in. we have stored the currUser in the res.locals -->
+                  <% if(typeof currUser !== 'undefined' && currUser && r.user && r.user._id.equals(currUser._id)) {%>
+                    <form action="/listings/<%= ad._id %>/reviews/<%= r._id %>?_method=DELETE" method="POST" class="d-inline">
                     <button class="btn btn-link text-danger p-0 border-0" type="submit" title="Delete Review">
                       <small>Delete</small>
                     </button>
-                  </form>
+                      </form>
+                    <% } %>  
                 </div>
                 <p><%= r.user ? r.user.username : 'Anonymous' %></p>
                 <p class="mb-0 text-secondary" style="font-size: 0.95rem;"><%= r.comment %></p>

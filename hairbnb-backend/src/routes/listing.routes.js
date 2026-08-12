@@ -36,8 +36,8 @@ router.get('/:id', wrapAsync(async (req, res) => {
     }
 
     const review = await Review.find({listing: req.params.id}).populate('user');
-
-    res.render("ad.ejs", { ad, review });
+    const user = req.user;
+    res.render("ad.ejs", { ad, review, user });
     // console.log(ad);
 }));
 
