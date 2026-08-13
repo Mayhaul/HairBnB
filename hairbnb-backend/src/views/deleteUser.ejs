@@ -1,0 +1,105 @@
+<%- layout("/layouts/boilerplate") %>
+
+<style>
+  .delete-account-container {
+    max-width: 580px;
+    margin: 3rem auto;
+  }
+
+  .delete-card {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    box-shadow: 0 10px 30px rgba(220, 53, 69, 0.08);
+  }
+
+  .danger-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background-color: #fff5f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+  }
+
+  .danger-icon {
+    font-size: 2.2rem;
+    color: #dc3545;
+  }
+
+  .warning-box {
+    background-color: #fff8f8;
+    border-left: 4px solid #dc3545;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+</style>
+
+<div class="container delete-account-container">
+  <div class="delete-card p-4 p-md-5 text-center">
+    
+    <!-- Warning Header Icon -->
+    <div class="danger-icon-wrapper">
+      <i class="fa-solid fa-triangle-exclamation danger-icon"></i>
+    </div>
+
+    <h2 class="fw-bold text-dark mb-2">Delete Account</h2>
+    <p class="text-muted mb-4">
+      Are you sure you want to delete your account, <strong><%= user.username %></strong>?
+    </p>
+
+    <!-- Impact Warning List -->
+    <div class="warning-box text-start mb-4">
+      <p class="fw-semibold text-danger mb-2">This action is permanent and cannot be undone:</p>
+      <ul class="text-secondary small mb-0 ps-3">
+        <li>All your active HairBnB listings will be permanently removed.</li>
+        <li>Your posted reviews and ratings will be deleted.</li>
+        <li>Your profile information and saved sessions will be erased.</li>
+      </ul>
+    </div>
+
+    <!-- Confirmation Form -->
+    <form action="/profile/<%= typeof user !== 'undefined' && user ? user._id : '' %>/delete" method="POST" class="mt-4">
+  <!-- Input Confirmation Fields -->
+  <div class="mb-3 text-start">
+    <label for="confirmUsername" class="form-label text-muted small fw-semibold">Confirm Username</label>
+    <input 
+      type="text" 
+      id="confirmUsername"
+      name="username" 
+      class="form-control rounded-3 py-2 px-3" 
+      placeholder="Enter your username" 
+      required
+    >
+  </div>
+
+  <div class="mb-4 text-start">
+    <label for="confirmPassword" class="form-label text-muted small fw-semibold">Confirm Password</label>
+    <input 
+      type="password" 
+      id="confirmPassword"
+      name="password" 
+      class="form-control rounded-3 py-2 px-3" 
+      placeholder="Enter your password" 
+      required
+    >
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center pt-2">
+    <!-- Cancel Button -->
+    <a href="/profile" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold order-2 order-sm-1 w-100 w-sm-auto">
+      Keep My Account
+    </a>
+
+    <!-- Permanent Delete Button -->
+    <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold order-1 order-sm-2 w-100 w-sm-auto">
+      Yes, Delete Account
+    </button>
+  </div>
+</form>
+
+  </div>
+</div>

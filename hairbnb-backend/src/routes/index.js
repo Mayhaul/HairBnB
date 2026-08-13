@@ -10,7 +10,7 @@ const router = express.Router();
 router.use('/listings', ListingRoutes );
 router.use('/listings/:id/reviews', reviewRoutes );
 router.use('/', authRoutes );
-router.use('/profile', userRoutes);
+router.use('/profile/:user', userRoutes);
 
 // read about this middleware
 router.all('*', (req,res,next)=>{

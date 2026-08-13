@@ -12,10 +12,22 @@ const userSchema = new mongoose.Schema(
 );
 
 
+import Review from "./Review.model.js";
+import Listing from "./Listing.model.js"
 
-userSchema.post('findOneAndDelete', async (DeletedUser)=>{
+
+userSchema.post('findOneAndDelete', async (deletedUser)=>{
     // we can add here the logic for deleting everything the user is associated to in our app.
-    console.log(DeletedUser);
+        if (deletedUser) {
+        console.log(`Deleting listings and review for user: ${deletedUser.username}`);
+
+        // 1. Delete all listings created by this user
+        await Listing.deleteMany({ user: deletedUser._id });
+
+        // 2. Delete all review authored by this user
+        await Review.deleteMany({ user: deletedUser._id });
+    }
+    // console.log(DeletedUser);
 })
 
 userSchema.plugin(passportLocalMongoose.default);
