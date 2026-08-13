@@ -12,12 +12,14 @@ import passport from 'passport';
 router.get('/', authMiddleware ,wrapAsync(async (req, res)=>{
     const userId = req.params.user;
     const user = await Users.findById(userId);
-    const Review = await Review.find({user: userId});
-    const Listing = await Listing.find({user: userId});
+    const Reviews = await Review.find({user: userId});
+    const Listings = await Listing.find({user: userId});
 
     // console.log(req.params);
-    res.render('profile.ejs', {user, Review, Listing});
+    res.render('profile.ejs', {user, Reviews, Listings});
 }));
+
+
 
 router.get('/delete', authMiddleware, wrapAsync( async (req, res)=>{
     const userId = req.params.user;
@@ -38,13 +40,13 @@ router.post('/delete', authMiddleware, wrapAsync(async (req, res, next) => {
         }
 
         // 3. Delete the user document
-        await Users.findByIdAndDelete(req.user._id);
+        await Users.findByIdAndDelete(req.params.user);
 
         // 4. Log out & destroy session
         req.logout((logoutErr) => {
             if (logoutErr) return next(logoutErr);
             req.flash('success', 'Your account has been permanently deleted.');
-            res.redirect('/Listing');
+            res.redirect('/Listings');
         });
 
     })(req, res, next); // <-- Don't forget to invoke the middleware here!
