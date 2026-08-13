@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const listingModel = new mongoose.Schema({
+const listingSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -32,4 +32,16 @@ const listingModel = new mongoose.Schema({
     country : String
 });
 
-export default mongoose.models.Listing || mongoose.model('Listing',listingModel);
+import Review  from "./Review.model.js";
+
+// When a listing is deleting, we want all of its comments deleted aswell. otherwise we will have random orphaned data in our review database.
+listingSchema.post('findByIdAndDelete', async (deletedListing)=>{
+    try{
+        const listingId = deletedListing._id;
+        await Review.deleteMany({listing: listingId});
+    }catch(e){
+        console.log(e);
+    }
+})
+
+export default mongoose.models.Listing || mongoose.model('Listing',listingSchema);

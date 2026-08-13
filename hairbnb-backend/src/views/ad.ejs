@@ -125,7 +125,7 @@
             <div>
               <h1 class="ad-title mb-1"><%= ad.title %></h1>
               <p class="text-muted mb-0 small">
-                Hosted by <strong><%= ad.user ? ad.user.username : 'Owner' %></strong>
+                Hosted by <strong><a style="text-decoration: none;" href="/profile/<%= ad.user._id %>"><%= ad.user ? ad.user.username : 'Owner' %></a></strong>
               </p>
             </div>
             <div class="text-end flex-shrink-0">
@@ -223,7 +223,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <div class="d-flex align-items-center gap-2">
                     <span class="fw-bold text-dark" style="font-size: 0.95rem;">
-                      @<%= r.user ? r.user.username : 'Anonymous' %>
+                      <a style="text-decoration: none;" href="/profile/<%= r.user._id %>">@<%= r.user ? r.user.username : 'Anonymous' %></a>
                     </span>
                   </div>
 

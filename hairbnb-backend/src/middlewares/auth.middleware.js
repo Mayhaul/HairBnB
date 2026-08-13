@@ -83,6 +83,7 @@ export async function listingAuth(req,res,next){
         req.flash('error', 'You are not authorized to do this');
         return res.redirect(`/listings/${listingId}`);
     }else{
+        req.listing = listing;
         next();
         }
 

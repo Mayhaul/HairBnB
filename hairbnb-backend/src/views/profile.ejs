@@ -1,0 +1,194 @@
+<%- layout("/layouts/boilerplate") %>
+
+<style>
+  /* Base Layout Container */
+  .profile-container {
+    max-width: 1000px;
+    margin: 2.5rem auto;
+  }
+
+  /* Profile Header Card */
+  .profile-card {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .profile-avatar-icon {
+    font-size: 4.5rem;
+    color: #fe424d;
+  }
+
+  /* Stat Badges */
+  .stat-card {
+    background-color: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 0.85rem 1.25rem;
+    min-width: 130px;
+  }
+
+  /* Content Cards (Listings & Reviews) */
+  .user-item-card {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .user-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .user-item-img {
+    height: 160px;
+    width: 100%;
+    object-fit: cover;
+    border-top-left-radius: 13px;
+    border-top-right-radius: 13px;
+  }
+
+  /* Custom Tab Navigation */
+  .nav-pills .nav-link {
+    color: #555555;
+    font-weight: 500;
+    border-radius: 30px;
+    padding: 0.5rem 1.5rem;
+  }
+
+  .nav-pills .nav-link.active {
+    background-color: #222222;
+    color: #ffffff;
+  }
+</style>
+
+<div class="container profile-container">
+  
+  <!-- PROFILE HEADER -->
+  <div class="profile-card p-4 p-md-5 mb-5">
+    <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-4 text-center text-md-start">
+      
+      <!-- Avatar -->
+      <div>
+        <i class="fa-solid fa-circle-user profile-avatar-icon"></i>
+      </div>
+
+      <!-- User Info -->
+      <div class="flex-grow-1">
+        <h2 class="fw-bold mb-1 text-dark"><%= user ? user.username : "User Profile" %></h2>
+        <p class="text-muted mb-3"><%= user ? user.email : "user@example.com" %></p>
+
+        <!-- Stats Counter -->
+        <div class="d-flex justify-content-center justify-content-md-start gap-3">
+          <div class="stat-card text-center">
+            <span class="d-block fw-bold fs-5 text-dark"><%= typeof userListings !== 'undefined' ? userListings.length : 0 %></span>
+            <small class="text-muted">Listings</small>
+          </div>
+          <div class="stat-card text-center">
+            <span class="d-block fw-bold fs-5 text-dark"><%= typeof userReviews !== 'undefined' ? userReviews.length : 0 %></span>
+            <small class="text-muted">Reviews</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action -->
+      <div class="mt-2 mt-md-0">
+        <a href="/listings/form" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold">
+          + Add New Listing
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- NAVIGATION TABS -->
+  <ul class="nav nav-pills justify-content-center justify-content-md-start mb-4 gap-2" id="profileTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="listings-tab" data-bs-toggle="pill" data-bs-target="#my-listings" type="button" role="tab">
+        My Listings
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="reviews-tab" data-bs-toggle="pill" data-bs-target="#my-reviews" type="button" role="tab">
+        My Reviews
+      </button>
+    </li>
+  </ul>
+
+  <!-- TAB CONTENT -->
+  <div class="tab-content" id="profileTabsContent">
+    
+    <!-- MY LISTINGS TAB -->
+    <div class="tab-pane fade show active" id="my-listings" role="tabpanel">
+      <% if (typeof listings !== 'undefined' && listings.length > 0) { %>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <% for (let ad of listings) { %>
+            <div class="col">
+              <div class="user-item-card h-100 d-flex flex-column overflow-hidden">
+                <img src="<%= ad.image && ad.image.url ? ad.image.url : 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80' %>" class="user-item-img" alt="<%= ad.title %>">
+                <div class="p-3 d-flex flex-column flex-grow-1">
+                  <h5 class="fw-bold mb-1 text-truncate"><%= ad.title %></h5>
+                  <p class="text-muted small mb-2">📍 <%= ad.location %>, <%= ad.country %></p>
+                  <p class="fw-bold text-danger mb-3">&#8377; <%= ad.price ? ad.price.toLocaleString("en-IN") : 0 %> <small class="text-muted fw-normal">/ night</small></p>
+                  
+                  <div class="mt-auto d-flex gap-2 pt-2 border-top">
+                    <a href="/listings/<%= ad._id %>" class="btn btn-sm btn-outline-dark flex-grow-1 rounded-pill">View</a>
+                    <a href="/listings/<%= ad._id %>/edit" class="btn btn-sm btn-dark rounded-pill px-3">Edit</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      <% } else { %>
+        <div class="text-center py-5 bg-light rounded-4 border">
+          <p class="text-muted mb-3 fs-5">You haven't posted any listings yet.</p>
+          <a href="/listings/form" class="btn btn-dark rounded-pill px-4">Create Your First Listing</a>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- MY REVIEWS TAB -->
+    <div class="tab-pane fade" id="my-reviews" role="tabpanel">
+      <% if (typeof reviews !== 'undefined' && reviews.length > 0) { %>
+        <div class="d-flex flex-column gap-3">
+          <% for (let r of reviews) { %>
+            <div class="user-item-card p-3 p-md-4">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <h6 class="fw-bold mb-1 text-dark">
+                    On listing: 
+                    <a href="/listings/<%= r.listing ? r.listing._id : '' %>" class="text-danger text-decoration-none">
+                      <%= r.listing ? r.listing.title : 'Listing' %>
+                    </a>
+                  </h6>
+                  <div class="text-warning small mb-2">
+                    <% for(let i=0; i < r.rating; i++) { %>★<% } %><% for(let i=r.rating; i < 5; i++) { %>☆<% } %>
+                  </div>
+                </div>
+
+                <!-- Delete Review -->
+                <% if (r.listing) { %>
+                  <form action="/listings/<%= r.listing._id %>/reviews/<%= r._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-link text-danger p-0 border-0" type="submit" title="Delete Review">
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </form>
+                <% } %>
+              </div>
+              <p class="text-secondary mb-0 small"><%= r.comment %></p>
+            </div>
+          <% } %>
+        </div>
+      <% } else { %>
+        <div class="text-center py-5 bg-light rounded-4 border">
+          <p class="text-muted mb-0 fs-5">You haven't left any reviews yet.</p>
+        </div>
+      <% } %>
+    </div>
+
+  </div>
+
+</div>

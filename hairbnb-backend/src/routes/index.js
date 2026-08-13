@@ -3,13 +3,14 @@ import ListingRoutes from './listing.routes.js';
 import apiError from '../utils/ApiError.js';
 import reviewRoutes from './review.routes.js';
 import authRoutes from './auth.routes.js'
+import userRoutes from './user.routes.js'
 const router = express.Router();
 
 // Mount listings routes
 router.use('/listings', ListingRoutes );
 router.use('/listings/:id/reviews', reviewRoutes );
 router.use('/', authRoutes );
-
+router.use('/profile', userRoutes);
 
 // read about this middleware
 router.all('*', (req,res,next)=>{

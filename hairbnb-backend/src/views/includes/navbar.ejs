@@ -90,42 +90,21 @@
     color: #ffffff;
   }
 
-  /* Profile Dropdown Styling */
-  .profile-dropdown-btn {
-    border-color: #dddddd !important;
+  /* Profile Link Styling */
+  .profile-link-btn {
+    border: 1px solid #dddddd;
     background-color: #ffffff;
+    color: #222222;
+    text-decoration: none;
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
   }
 
-  .profile-dropdown-btn:hover, 
-  .profile-dropdown-btn:focus {
-    border-color: #222222 !important;
-    background-color: #ffffff !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  .profile-link-btn:hover {
+    border-color: #222222;
+    background-color: #ffffff;
+    color: #222222;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   }
-
-  .profile-dropdown-menu {
-    border-radius: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    min-width: 200px;
-  }
-
-  .profile-dropdown-menu .dropdown-item {
-    padding: 0.6rem 1.2rem;
-    font-weight: 500;
-    border-radius: 6px;
-    margin: 0 0.25rem;
-  }
-
-  .profile-dropdown-menu .dropdown-item:hover {
-    background-color: #f7f7f7;
-  }
-  /* Show dropdown on hover without relying on Bootstrap JS */
-.dropdown:hover .dropdown-menu {
-  display: block;
-  margin-top: 0;
-}
 </style>
 
 <nav class="navbar navbar-expand-md custom-navbar border-bottom sticky-top">
@@ -166,38 +145,20 @@
           <!-- Add Listing Link -->
           <a class="nav-link nav-link-custom fw-semibold" href="/listings/form">+ Add Listing</a>
 
-          <!-- Profile Dropdown Menu -->
-          <div class="dropdown ms-md-2">
-            <button 
-              class="btn profile-dropdown-btn dropdown-toggle d-flex align-items-center gap-2 rounded-pill px-3 py-1 shadow-sm" 
-              type="button" 
-              id="userProfileDropdown" 
-              data-bs-toggle="dropdown" 
-              aria-expanded="false"
-            >
-              <i class="fa-solid fa-circle-user fs-4 text-secondary"></i>
-              <span class="fw-semibold text-dark"><%= currUser.username %></span>
-            </button>
+          <!-- Profile Link (Navigates directly to /profile) -->
+          <a href="/profile/<%= currUser._id %>" class="btn profile-link-btn d-flex align-items-center gap-2 rounded-pill px-3 py-1 shadow-sm ms-md-2">
+            <i class="fa-solid fa-circle-user fs-4 text-secondary"></i>
+            <span class="fw-semibold text-dark"><%= currUser.username %></span>
+          </a>
 
-            <!-- Dropdown Menu Items -->
-            <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu mt-2" aria-labelledby="userProfileDropdown">
-              <li>
-                <span class="dropdown-item-text text-muted small">
-                  Logged in as <strong><%= currUser.username %></strong>
-                </span>
-              </li>
-              <li><hr class="dropdown-divider my-1"></li>
-              <li>
-                <a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="/logout">
-                  <i class="fa-solid fa-right-from-bracket"></i> Log out
-                </a>
-              </li>
-            </ul>
-          </div>
+          <!-- Logout Link -->
+          <a class="nav-link nav-link-custom text-danger ms-md-1" href="/logout">
+            <i class="fa-solid fa-right-from-bracket"></i> Log out
+          </a>
 
         <% } else { %>
           <!-- Logged Out View -->
-           <a class="nav-link nav-link-custom fw-semibold" href="/listings/form">+ Add Listing</a>
+          <a class="nav-link nav-link-custom fw-semibold" href="/listings/form">+ Add Listing</a>
           <a class="nav-link nav-link-custom" href="/signup">Sign up</a>
           <a class="btn btn-nav-outline ms-md-1" href="/login">Log in</a>
         <% } %>

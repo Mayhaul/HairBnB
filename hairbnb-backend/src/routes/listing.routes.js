@@ -49,7 +49,7 @@ router.get('/:id', wrapAsync(async (req, res) => {
 // Edit listing
 router.get('/:id/edit',authMiddleware, listingAuth, wrapAsync(async (req, res) => {
     const id = req.params.id;
-    const ad = await Listing.findById(id);
+    const ad = req.listing;
 
     if(!ad){
         throw new apiError(404,'Listing Not Found');
@@ -60,7 +60,7 @@ router.get('/:id/edit',authMiddleware, listingAuth, wrapAsync(async (req, res) =
 }));
 
 router.post('/:id/edit',authMiddleware, listingAuth, validateListing, wrapAsync(async (req, res) => {
-    const { id } = req.params;
+    const id  = req.listing._id;
 
     await Listing.findByIdAndUpdate(id, req.body);
     // flash message
