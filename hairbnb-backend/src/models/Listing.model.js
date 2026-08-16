@@ -34,7 +34,7 @@ const Listings = new mongoose.Schema({
 
 import Review  from "./Review.model.js";
 
-// When a listing is deleting, we want all of its comments deleted aswell. otherwise we will have random orphaned data in our review database.
+// When a listing is deleting, we want all o f its comments deleted aswell. otherwise we will have random orphaned data in our review database.
 Listings.post('findOneAndDelete', async (deletedListing)=>{
     try{
         const listingId = deletedListing._id;

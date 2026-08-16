@@ -1,6 +1,8 @@
 import express from "express";
 const router = express.Router();
+import multer from "multer";
 
+import storage from "../config/cloudConfig.js";
 import { validateListing, validateReview } from "../middlewares/validation.middleware.js";
 import wrapAsync from "../utils/asyncHandler.js"; 
 import Listing from '../models/Listing.model.js'
@@ -8,22 +10,29 @@ import Review from "../models/review.model.js";
 import apiError from "../utils/ApiError.js";
 import {authMiddleware, reviewAuth, listingAuth} from "../middlewares/auth.middleware.js";
 
-// add auth mw later
+const upload = multer({storage: storage});
+
+
 router.get('/form', authMiddleware, (req, res) => {
     res.render('form.ejs');
 });
 
-router.post('/submit',authMiddleware, validateListing, wrapAsync(async (req, res) => {
+// Hey AI add in the commit message that the pic is saving in cloud but is undefined on the console.
+
+router.post('/submit',authMiddleware, upload.single('image[url]') , wrapAsync(async (req, res) => {
     let user = req.user._id;
-    const listingObj = {user, ...req.body };
-    console.log(listingObj);
+    // const listingObj = {user, ...req.body };
+    // console.log(listingObj);
 
-    await Listing.create(listingObj);
-    console.log("submitted");
+    console.log(req.file);
 
-    // flash message
-    req.flash('success', 'New listing created successfully');
-    res.redirect('/listings');
+    // await Listing.create(listingObj);
+    // console.log("submitted");
+    // console.log(req.body);
+    // res.send(req.file);
+    // // flash message
+    // req.flash('success', 'New listing created successfully');
+    // res.redirect('/listings');
 }));
 
 

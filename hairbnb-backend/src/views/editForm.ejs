@@ -8,6 +8,7 @@
       action="/listings/<%= ad._id %>/edit" 
       method="POST" 
       class="needs-validation" 
+      enctype="multipart/form-data"
       novalidate
     >
       
@@ -42,16 +43,16 @@
 
       <!-- Image Link -->
       <div class="mb-3">
-        <label for="image" class="form-label">Image Link</label>
+        <label for="image" class="form-label">Upload Image</label>
         <input 
-          type="text" 
+          type="file" 
           id="image" 
           name="image[url]" 
           class="form-control"
-          placeholder="enter image URL/Link"
+          placeholder="Upload Image"
           value="<%= ad.image ? ad.image.url : '' %>"
         >
-        <div class="valid-feedback">Link looks good!</div>
+        <div class="valid-feedback">Image looks good!</div>
       </div>
 
       <!-- Price & Country Row -->
