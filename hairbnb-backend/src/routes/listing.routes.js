@@ -17,22 +17,30 @@ router.get('/form', authMiddleware, (req, res) => {
     res.render('form.ejs');
 });
 
-// Hey AI add in the commit message that the pic is saving in cloud but is undefined on the console.
 
-router.post('/submit',authMiddleware, upload.single('image[url]') , wrapAsync(async (req, res) => {
+router.post('/submit',authMiddleware, upload.single('image') , wrapAsync(async (req, res) => {
     let user = req.user._id;
     // const listingObj = {user, ...req.body };
     // console.log(listingObj);
 
     console.log(req.file);
+    console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
+        console.log("FILES:", req.files);
 
+        // res.json({
+        //     body: req.body,
+        //     file: req.file,
+        //     files: req.files
+        // });
+    
     // await Listing.create(listingObj);
     // console.log("submitted");
     // console.log(req.body);
     // res.send(req.file);
     // // flash message
     // req.flash('success', 'New listing created successfully');
-    // res.redirect('/listings');
+    res.redirect('/listings');
 }));
 
 

@@ -18,14 +18,9 @@ const Listings = new mongoose.Schema({
         set: (D)=> D==="" ? "Description" : D
     },
     image: {
-    filename: {
-        type: String,
-        default: "listingimage"
-    },
-    url: {
         type: String,
         default: "https://imgs.search.brave.com/..."
-    }
+    
 },
     price : Number,
     location : String,

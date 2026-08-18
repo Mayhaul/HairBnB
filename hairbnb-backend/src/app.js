@@ -26,6 +26,8 @@ app.engine("ejs", ejsMate);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+// stores session id in cookies with its hashed signature with secret.
 app.use(session({
     secret: 'mysecret',
     resave: false,
@@ -41,6 +43,8 @@ app.use(flash());
 
 // initializing passport
 app.use(passport.initialize());
+
+// uses the session to figure out which user is logged in.
 app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
@@ -105,6 +109,12 @@ app.get('/demo', async (req,res)=>{
 
     res.send(Demo);
 })
+
+    app.get('/test', (req, res) => {
+  console.log('Raw Session:', req.session);
+  console.log('Passport User:', req.session.passport);
+  res.send('Check server terminal');
+});
 
 
 
