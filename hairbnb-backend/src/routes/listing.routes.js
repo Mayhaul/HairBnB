@@ -10,7 +10,7 @@ import Review from "../models/review.model.js";
 import apiError from "../utils/ApiError.js";
 import {authMiddleware, reviewAuth, listingAuth} from "../middlewares/auth.middleware.js";
 
-const upload = multer({storage: storage});
+const upload = multer({storage:storage});
 
 
 router.get('/form', authMiddleware, (req, res) => {
@@ -20,26 +20,16 @@ router.get('/form', authMiddleware, (req, res) => {
 
 router.post('/submit',authMiddleware, upload.single('image') , wrapAsync(async (req, res) => {
     let user = req.user._id;
-    // const listingObj = {user, ...req.body };
-    // console.log(listingObj);
 
-    console.log(req.file);
-    console.log("BODY:", req.body);
-        console.log("FILE:", req.file);
-        console.log("FILES:", req.files);
+    const listingObj = {user, image: req.file.path, ...req.body };
+    console.log(listingObj);
 
-        // res.json({
-        //     body: req.body,
-        //     file: req.file,
-        //     files: req.files
-        // });
+    await Listing.create(listingObj);
+    console.log("submitted");
     
-    // await Listing.create(listingObj);
-    // console.log("submitted");
-    // console.log(req.body);
-    // res.send(req.file);
-    // // flash message
-    // req.flash('success', 'New listing created successfully');
+
+    // flash message
+    req.flash('success', 'New listing created successfully');
     res.redirect('/listings');
 }));
 
