@@ -68,7 +68,7 @@ router.get('/:id/edit',authMiddleware, listingAuth, wrapAsync(async (req, res) =
 
 router.post('/:id/edit',authMiddleware, listingAuth, upload.single('image'), validateListing, wrapAsync(async (req, res) => {
     const id  = req.listing._id;
-    const listingObj = {user, image: req.file.path, ...req.body }; 
+    const listingObj = {user: req.user._id, image: req.file.path, ...req.body }; 
     await Listing.findByIdAndUpdate(id, listingObj);
     // flash message
     req.flash('success', 'updated successfully');
