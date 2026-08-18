@@ -92,3 +92,15 @@ export async function listingAuth(req,res,next){
     }
 
 }
+
+export async function accountAuth(req,res,next){
+    const user = req.user._id;
+    const userIdFromUrl = req.params.user;
+
+    if(!user.equals(userIdFromUrl)){
+        res.send('You are not authorized to delete an account that belongs to someone else');
+    }else{
+        next();
+    }
+
+}

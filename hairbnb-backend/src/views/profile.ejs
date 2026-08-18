@@ -100,10 +100,13 @@
     <i class="fa-solid fa-plus me-1"></i> Add New Listing
   </a>
 
-  <!-- Secondary Danger Action: Delete Account -->
+ <% if(user._id.equals(currUser._id)) { %>
+   <!-- Secondary Danger Action: Delete Account -->
   <a href="/profile/<%= user._id %>/delete" class="btn btn-outline-danger rounded-pill px-4 py-2 fw-semibold">
     <i class="fa-solid fa-user-xmark me-1"></i> Delete Account
   </a>
+  <% } %>
+
 </div>
 
     </div>

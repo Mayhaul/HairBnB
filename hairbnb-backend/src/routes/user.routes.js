@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router({ mergeParams: true });
 
+import { accountAuth } from "../middlewares/auth.middleware.js";
 import wrapAsync from "../utils/asyncHandler.js";
 import Listing from "../models/Listing.model.js"
 import Review from "../models/Review.model.js";
@@ -21,14 +22,14 @@ router.get('/', authMiddleware ,wrapAsync(async (req, res)=>{
 
 
 
-router.get('/delete', authMiddleware, wrapAsync( async (req, res)=>{
+router.get('/delete', authMiddleware, accountAuth, wrapAsync( async (req, res)=>{
     const userId = req.params.user;
     const user = await Users.findById(userId);
 
     res.render('deleteUser.ejs', {user});
 }));
 
-router.post('/delete', authMiddleware, wrapAsync(async (req, res, next) => {
+router.post('/delete', authMiddleware, accountAuth, wrapAsync(async (req, res, next) => {
     // 1. Authenticate credentials manually using passport.authenticate callback
     passport.authenticate('local', async (err, user, info) => {
         if (err) return next(err);

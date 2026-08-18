@@ -18,7 +18,7 @@ router.get('/form', authMiddleware, (req, res) => {
 });
 
 
-router.post('/submit',authMiddleware, upload.single('image') , wrapAsync(async (req, res) => {
+router.post('/submit',authMiddleware, validateListing, upload.single('image') , wrapAsync(async (req, res) => {
     let user = req.user._id;
 
     const listingObj = {user, image: req.file.path, ...req.body };
@@ -68,8 +68,8 @@ router.get('/:id/edit',authMiddleware, listingAuth, wrapAsync(async (req, res) =
 
 router.post('/:id/edit',authMiddleware, listingAuth, validateListing, wrapAsync(async (req, res) => {
     const id  = req.listing._id;
-
-    await Listing.findByIdAndUpdate(id, req.body);
+    const listingObj = {user, image: req.file.path, ...req.body }; 
+    await Listing.findByIdAndUpdate(id, listingObj);
     // flash message
     req.flash('success', 'updated successfully');
 
