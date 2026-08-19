@@ -137,7 +137,9 @@
           <p class="text-muted mb-3">
             📍 <%= ad.location %>, <%= ad.country %>
           </p>
-
+            <!-- <iframe width="500" height="300" allow="geolocation" src="https://api.maptiler.com/maps/streets-v4/?key=sBkSK4v2jpIt8GitEkU4#3.4/20.12164/76.56914"></iframe> -->
+            <div id="map" style="height: 400px; width: 100%;"></div>
+             </div>
           <p class="text-secondary mb-4" style="line-height: 1.6;">
             <%= ad.description %>
           </p>
@@ -259,3 +261,7 @@
 
   </div>
 </div>
+<script type="module" src="../public/js/map.js"></script>
+<script>
+    window.MAP_API_KEY = "<%= process.env.MAP_API_KEY %>";
+</script>

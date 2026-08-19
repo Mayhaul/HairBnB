@@ -13,11 +13,15 @@ import passport from 'passport';
 router.get('/', authMiddleware ,wrapAsync(async (req, res)=>{
     const userId = req.params.user;
     const user = await Users.findById(userId);
-    const Reviews = await Review.find({user: userId});
-    const Listings = await Listing.find({user: userId});
+    const reviews = await Review.find({ user: userId });
+    const listings = await Listing.find({ user: userId });
 
-    // console.log(req.params);
-    res.render('profile.ejs', {user, Reviews, Listings});
+    res.render("profile.ejs", {
+        user,
+        reviews,
+        listings
+    });
+    
 }));
 
 

@@ -18,6 +18,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@maptiler/geocoding-control": "^3.0.0",
+    "@maptiler/sdk": "^4.1.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.10.0",
     "connect-flash": "^0.1.1",

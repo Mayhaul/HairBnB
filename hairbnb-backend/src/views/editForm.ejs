@@ -48,11 +48,23 @@
           type="file" 
           id="image" 
           name="image" 
-          class="form-control"
+          class="form-control mb-3"
           placeholder="Upload Image"
           value="<%= ad.image ? ad.image.url : '' %>"
         >
+        
+        <!-- UI Fixed Preview Section -->
+        <div class="card p-2 bg-light d-inline-block border rounded">
+          <label class="form-label small text-muted d-block mb-2 fw-bold">Original Image Preview</label>
+          <img 
+            src="<%= ad.image %>" 
+            alt="preview" 
+            class="img-fluid rounded border shadow-sm"
+            style="max-height: 200px; width: auto; object-fit: cover;"
+          >
+        </div>
         <div class="valid-feedback">Image looks good!</div>
+
       </div>
 
       <!-- Price & Country Row -->

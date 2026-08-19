@@ -136,7 +136,7 @@
           <% for (let ad of listings) { %>
             <div class="col">
               <div class="user-item-card h-100 d-flex flex-column overflow-hidden">
-                <img src="<%= ad.image && ad.image.url ? ad.image.url : 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80' %>" class="user-item-img" alt="<%= ad.title %>">
+                <img src="<%= ad && ad.image ? ad.image : 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80' %>" class="user-item-img" alt="<%= ad.title %>">
                 <div class="p-3 d-flex flex-column flex-grow-1">
                   <h5 class="fw-bold mb-1 text-truncate"><%= ad.title %></h5>
                   <p class="text-muted small mb-2">📍 <%= ad.location %>, <%= ad.country %></p>
