@@ -49,7 +49,7 @@ router.get('/:id', wrapAsync(async (req, res) => {
 
     const review = await Review.find({listing: req.params.id}).populate('user');
     const user = req.user;
-    res.render("ad.ejs", { ad, review });
+    res.render("ad.ejs", { ad, review, mapApiKey: process.env.MAP_API_KEY});
     // console.log(ad);
 }));
 
@@ -74,7 +74,7 @@ router.post('/:id/edit',authMiddleware, listingAuth, upload.single('image'), val
     if(typeof req.file !== "undefined"){
         listing.image = req.file.path;
     }
-    
+
     // flash message
     req.flash('success', 'updated successfully');
 
