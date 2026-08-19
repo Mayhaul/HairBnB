@@ -1,3 +1,5 @@
+console.log("MAP KEY:", window.MAP_API_KEY);
+console.log("MAP ELEMENT:", document.getElementById("map"));
 import * as maptilersdk from "@maptiler/sdk";
 import { GeocodingControl } from "@maptiler/geocoding-control/maptilersdk";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
