@@ -1,69 +1,30 @@
 import express from 'express'
-import User from '../models/User.model.js'
-import wrapAsync from '../utils/asyncHandler.js';
-import passport from 'passport';
-import {authMiddleware, saveRedirectUrl} from '../middlewares/auth.middleware.js'
 const router = express.Router();
+import passport from 'passport';
+
+// MIDDLEWARES
+import wrapAsync from '../utils/asyncHandler.js';
+import {authMiddleware, saveRedirectUrl} from '../middlewares/auth.middleware.js'
+
+// CONTROLLERS
+import { loginHandler, loginPage, logOutPage, signUpHandler, signUpPage } from '../controllers/auth.controller.js';
+
 
 
 // SETTING UP A NEW USER
-router.get('/signup',  (req, res)=>{
-    res.render('signup.ejs');
-})
+router.get('/signup',  signUpPage)
 
-router.post('/signup',saveRedirectUrl, wrapAsync(async (req, res)=>{
-    
-    try {
-        const {username, email, password} = req.body;
+// SignUp
+router.post('/signup',saveRedirectUrl, wrapAsync(signUpHandler))
 
-    const user = new User({
-        username: username,
-        email: email
-    });
+// Login page.
+ router.get('/login', wrapAsync( loginPage ));
 
-    const registeredUser = await User.register(user,password);
+// Login 
+ router.post('/login', saveRedirectUrl, passport.authenticate('local',{ failureRedirect: '/login', failureFlash: true }),wrapAsync(loginHandler));
 
-    // Log the user in after successful registration
-    req.login(registeredUser, (err) => {
-      if (err) return next(err);
-      req.flash('success', 'Welcome to HairBnB!');
-      res.redirect('/listings');
-    });
-  } catch (e) {
-    req.flash('error', e.message);
-    res.redirect(res.locals.redirectUrl);
-  }
-}))
-
-// Logging an existing user
- router.get('/login', wrapAsync( async(req, res)=>{
-    res.render('login.ejs');
- }));
-
- router.post(
-    '/login',
-    saveRedirectUrl,
-    passport.authenticate('local',{
-        failureRedirect: '/login',
-        failureFlash: true
-    }
-    ),
-     wrapAsync( async(req, res)=>{
-        console.log(res.locals.currUser);
-        let redirectUrl = res.locals.redirectUrl || '/listings';
-        res.redirect(redirectUrl);
- }));
-
-// Logout
-router.get('/logout', (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    req.flash('success', 'You are logged out!');
-    res.redirect('/listings');
-  });
-});
+// Logout Page.
+router.get('/logout', logOutPage);
 
 // Start Google authentication
 router.get(

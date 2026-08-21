@@ -143,7 +143,7 @@
         <% if (typeof currUser !== 'undefined' && currUser) { %>
           
           <!-- Add Listing Link -->
-          <a class="nav-link nav-link-custom fw-semibold" href="/listings/form">+ Add Listing</a>
+          <a class="nav-link nav-link-custom fw-semibold" href="/listings/new">+ Add Listing</a>
 
           <!-- Profile Link (Navigates directly to /profile) -->
           <a href="/profile/<%= currUser._id %>" class="btn profile-link-btn d-flex align-items-center gap-2 rounded-pill px-3 py-1 shadow-sm ms-md-2">
@@ -158,7 +158,7 @@
 
         <% } else { %>
           <!-- Logged Out View -->
-          <a class="nav-link nav-link-custom fw-semibold" href="/listings/form">+ Add Listing</a>
+          <a class="nav-link nav-link-custom fw-semibold" href="/listings/new">+ Add Listing</a>
           <a class="nav-link nav-link-custom" href="/signup">Sign up</a>
           <a class="btn btn-nav-outline ms-md-1" href="/login">Log in</a>
         <% } %>
