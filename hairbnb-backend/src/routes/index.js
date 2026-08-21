@@ -1,6 +1,6 @@
 import express from 'express';
 import ListingRoutes from './listing.routes.js';
-import apiError from '../utils/ApiError.js';
+import apiError from '../utils/api.error.js';
 import reviewRoutes from './review.routes.js';
 import authRoutes from './auth.routes.js'
 import userRoutes from './user.routes.js'

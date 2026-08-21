@@ -1,6 +1,6 @@
 import { ListingSchema } from "../schemas/listing.schema.js"
 import { reviewSchema } from "../schemas/review.schema.js";
-import apiError from "../utils/ApiError.js";
+import apiError from "../utils/api.error.js";
 
 // Listing Validator Middleware
 export const validateListing = (req,res,next) =>{

@@ -1,6 +1,6 @@
 import Listing from '../models/listing.model.js'
 import Review from "../models/review.model.js";
-import apiError from "../utils/ApiError.js";
+import apiError from "../utils/api.error.js";
 
 // Get new listing form.
 export const getNewListingForm = async(req, res) => {

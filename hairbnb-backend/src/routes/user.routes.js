@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router({ mergeParams: true });
 
 import { accountAuth } from "../middlewares/auth.middleware.js";
-import wrapAsync from "../utils/asyncHandler.js";
+import wrapAsync from "../utils/async.handler.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 

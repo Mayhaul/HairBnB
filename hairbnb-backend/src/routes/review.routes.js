@@ -4,7 +4,7 @@ const router = express.Router({ mergeParams: true });
 
 import {authMiddleware, saveRedirectUrl, reviewAuth} from "../middlewares/auth.middleware.js";
 import { validateListing, validateReview } from "../middlewares/validation.middleware.js";
-import wrapAsync from "../utils/asyncHandler.js";
+import wrapAsync from "../utils/async.handler.js";
 
 // REVIEW CONTROLLERS
 import { addReview, deleteReview } from "../controllers/review.controller.js";

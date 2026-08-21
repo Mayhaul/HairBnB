@@ -3,7 +3,7 @@ const router = express.Router();
 import passport from 'passport';
 
 // MIDDLEWARES
-import wrapAsync from '../utils/asyncHandler.js';
+import wrapAsync from '../utils/async.handler.js';
 import {authMiddleware, saveRedirectUrl} from '../middlewares/auth.middleware.js'
 
 // CONTROLLERS
