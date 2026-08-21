@@ -28,7 +28,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Configure mongo session store.
-
 const store = MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
     crypto: {
