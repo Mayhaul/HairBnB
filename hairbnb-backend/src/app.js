@@ -11,6 +11,7 @@ import LocalStrategy from 'passport-local'
 import User from './models/User.model.js'
 import GoogleStrategy from  'passport-google-oauth20'
 import dotenv from 'dotenv'
+import MongoStore from 'connect-mongo';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,9 +27,20 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Configure mongo session store.
+
+const store = MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    crypto: {
+        secret: 'mysecret'
+    },
+    touchAfter: 24 * 3600
+});
+
 
 // stores session id in cookies with its hashed signature with secret.
 app.use(session({
+    store,
     secret: 'mysecret',
     resave: false,
     saveUninitialized: true,
