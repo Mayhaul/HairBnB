@@ -31,6 +31,7 @@
     "express-session": "^1.19.0",
     "joi": "^18.2.3",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^7.5.0",
     "mongoose": "^8.3.1",
     "multer": "^2.2.0",
     "multer-storage-cloudinary": "^4.0.0",
