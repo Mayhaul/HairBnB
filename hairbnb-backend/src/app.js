@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 const store = MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
     crypto: {
-        secret: 'mysecret'
+        secret: process.env.SESSION_SECRET
     },
     touchAfter: 24 * 3600
 });
@@ -40,7 +40,7 @@ const store = MongoStore.create({
 // stores session id in cookies with its hashed signature with secret.
 app.use(session({
     store,
-    secret: 'mysecret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
