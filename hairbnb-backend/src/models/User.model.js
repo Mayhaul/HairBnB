@@ -12,8 +12,8 @@ const userSchema = new mongoose.Schema(
 );
 
 
-import Review from "./Review.model.js";
-import Listing from "./Listing.model.js"
+import Review from "./review.model.js";
+import Listing from "./listing.model.js"
 
 
 userSchema.post('findOneAndDelete', async (deletedUser)=>{

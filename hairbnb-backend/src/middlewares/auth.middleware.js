@@ -25,7 +25,7 @@ export  function saveRedirectUrl(req, res, next){
     next();
 }
 
-import Review from '../models/Review.model.js'
+import Review from '../models/review.model.js'
 
 // Only review owners can delete the review.
 export async function reviewAuth (req, res, next){
@@ -58,7 +58,7 @@ export async function reviewAuth (req, res, next){
     }
 }
 
-import Listing from '../models/Listing.model.js'
+import Listing from '../models/listing.model.js'
 
 export async function listingAuth(req,res,next){
     // match the req.user id with the listing user id.

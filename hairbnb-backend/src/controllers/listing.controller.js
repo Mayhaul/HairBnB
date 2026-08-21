@@ -1,5 +1,5 @@
-import Listing from '../models/Listing.model.js'
-import Review from "../models/Review.model.js";
+import Listing from '../models/listing.model.js'
+import Review from "../models/review.model.js";
 import apiError from "../utils/ApiError.js";
 
 // Get new listing form.

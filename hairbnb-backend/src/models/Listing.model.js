@@ -27,7 +27,7 @@ const Listings = new mongoose.Schema({
     country : String
 });
 
-import Review  from "./Review.model.js";
+import Review  from "./review.model.js";
 
 // When a listing is deleting, we want all o f its comments deleted aswell. otherwise we will have random orphaned data in our review database.
 Listings.post('findOneAndDelete', async (deletedListing)=>{
