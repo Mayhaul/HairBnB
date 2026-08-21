@@ -8,7 +8,7 @@ import flash from 'connect-flash';
 import routes from './routes/index.js'; 
 import passport from 'passport'
 import LocalStrategy from 'passport-local'
-import User from './models/User.model.js'
+import User from './models/user.model.js'
 import GoogleStrategy from  'passport-google-oauth20'
 import dotenv from 'dotenv'
 import MongoStore from 'connect-mongo';

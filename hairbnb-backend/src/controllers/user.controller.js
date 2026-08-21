@@ -1,6 +1,6 @@
 import Listing from "../models/listing.model.js"
 import Review from "../models/review.model.js";
-import Users from "../models/User.model.js";
+import Users from "../models/user.model.js";
 import passport from 'passport';
 
 

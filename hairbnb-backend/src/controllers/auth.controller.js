@@ -1,4 +1,4 @@
-import User from '../models/User.model.js'
+import User from '../models/user.model.js'
 
 // SignUP page
 export const signUpPage = (req, res)=>{
