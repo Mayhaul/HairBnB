@@ -134,6 +134,18 @@ The repository separates routes, models, services, middleware, schemas, utilitie
 | `POST` | `/login` | Authenticate using Passport Local |
 | `GET` | `/logout` | End the current session |
 
+### Users / Profiles
+
+User routes are mounted under `/profile/:user` and use authentication plus account-ownership authorization where required. fileciteturn110file0L2-L2
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| `GET` | `/profile/:user` | View a user's profile |
+| `GET` | `/profile/:user/delete` | Render the account deletion page for the account owner |
+| `POST` | `/profile/:user/delete` | Delete the account after authorization |
+
+The user router uses `mergeParams: true` so it can access the `:user` parameter from the parent route. fileciteturn111file0L2-L2
+
 ### Listings
 
 | Method | Route | Purpose |
