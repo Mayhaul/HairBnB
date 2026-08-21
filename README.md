@@ -2,15 +2,15 @@
 
 A full-stack Airbnb-inspired marketplace for discovering, creating, editing, and reviewing property listings.
 
-HairBnB is built around a modular Node.js/Express backend with MongoDB persistence, server-rendered EJS views, Passport-based authentication, Joi validation, reusable middleware, and Cloudinary-backed image uploads.
+HairBnB is built around a modular Node.js/Express backend with MongoDB persistence, server-rendered EJS views, Passport-based local authentication, Joi validation, reusable middleware, Mongo-backed sessions, and Cloudinary-backed image uploads.
 
 > **Project status:** Core authentication, authorization, listing CRUD, reviews, validation, sessions, and image upload/storage flows are implemented. Booking functionality is the next major backend feature.
 
 ## Features
 
 - **User authentication** with local username/password authentication through Passport.
-- **Google OAuth 2.0 login** with automatic account creation for first-time Google users.
 - **Session-based authentication** with Passport serialization/deserialization.
+- **MongoDB-backed sessions** using `connect-mongo`.
 - **Authorization middleware** for protected account and listing actions.
 - **Listings CRUD** for creating, viewing, editing, and deleting listings.
 - **Listing ownership checks** to protect listing management actions.
@@ -34,9 +34,9 @@ HairBnB is built around a modular Node.js/Express backend with MongoDB persisten
 | Database | MongoDB |
 | ODM | Mongoose |
 | Templating | EJS, EJS-Mate |
-| Authentication | Passport.js, Passport Local, Google OAuth 2.0 |
+| Authentication | Passport.js, Passport Local |
 | Validation | Joi |
-| Sessions | Express Session |
+| Sessions | Express Session, connect-mongo |
 | File Uploads | Multer |
 | Image Storage | Cloudinary, multer-storage-cloudinary |
 | Password Authentication | passport-local-mongoose, bcryptjs |
@@ -133,8 +133,6 @@ The repository separates routes, models, services, middleware, schemas, utilitie
 | `GET` | `/login` | Render login page |
 | `POST` | `/login` | Authenticate using Passport Local |
 | `GET` | `/logout` | End the current session |
-| `GET` | `/auth/google` | Start Google OAuth flow |
-| `GET` | `/auth/google/callback` | Handle Google OAuth callback |
 
 ### Listings
 
@@ -211,7 +209,7 @@ A listing contains:
 
 ### User
 
-Users support local Passport authentication and can also be associated with a Google account through `googleId`.
+Users support local Passport authentication.
 
 ### Review
 
@@ -223,12 +221,9 @@ A booking model and route structure are present as part of the project's planned
 
 ## Authentication & Authorization
 
-HairBnB uses Passport to support two authentication strategies:
+HairBnB currently uses Passport for local authentication with `passport-local` and `passport-local-mongoose`.
 
-1. **Local authentication** using `passport-local` and `passport-local-mongoose`.
-2. **Google OAuth 2.0** using `passport-google-oauth20`.
-
-Sessions are maintained with `express-session` and Passport serialization/deserialization.
+Sessions are maintained with `express-session` and persisted in MongoDB using `connect-mongo`. Passport handles serialization/deserialization of the authenticated user.
 
 Authorization is handled separately from authentication. Examples include:
 
@@ -259,7 +254,7 @@ The main router also provides centralized handling for unknown routes and applic
 Make sure the following are installed:
 
 - Node.js 18+
-- MongoDB running locally
+- MongoDB Atlas or a local MongoDB instance
 - npm
 - A Cloudinary account for listing image uploads
 
@@ -282,26 +277,16 @@ Create a `.env` file inside `hairbnb-backend/`.
 
 ```env
 PORT=3000
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
+MONGO_URI=your_mongodb_connection_string
+SESSION_SECRET=your_session_secret
 CLOUD_NAME=your_cloudinary_cloud_name
 CLOUD_API_KEY=your_cloudinary_api_key
 CLOUD_API_SECRET=your_cloudinary_api_secret
 ```
 
-Google credentials are required for Google OAuth. Cloudinary credentials are required for listing image uploads. Local authentication does not require Google credentials.
+Cloudinary credentials are required for listing image uploads. A MongoDB connection string and session secret are required for the application to run with persistent sessions.
 
-### 4. Start MongoDB
-
-The current database configuration connects to:
-
-```text
-mongodb://127.0.0.1:27017/hairbnb
-```
-
-Start your local MongoDB instance before starting the application.
-
-### 5. Start the server
+### 4. Start the server
 
 Development mode:
 
@@ -322,8 +307,8 @@ The server listens on the port specified by `PORT`.
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `PORT` | Yes | HTTP server port |
-| `GOOGLE_CLIENT_ID` | For Google login | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | For Google login | Google OAuth client secret |
+| `MONGO_URI` | Yes | MongoDB connection string |
+| `SESSION_SECRET` | Yes | Express session signing secret |
 | `CLOUD_NAME` | For image uploads | Cloudinary cloud name |
 | `CLOUD_API_KEY` | For image uploads | Cloudinary API key |
 | `CLOUD_API_SECRET` | For image uploads | Cloudinary API secret |
@@ -346,6 +331,7 @@ npm start      # Start with Node
 - Reuse middleware for authentication, authorization, and request validation.
 - Centralize asynchronous error propagation instead of duplicating `try/catch` blocks.
 - Store uploaded binary assets in Cloudinary rather than MongoDB.
+- Persist Express sessions in MongoDB rather than the default in-memory store.
 - Keep views and public assets separate from backend logic.
 
 ## Current Scope & Roadmap
@@ -356,13 +342,24 @@ The current repository establishes the foundation for a broader rental marketpla
 - Add availability checks and prevent overlapping bookings.
 - Add search, filtering, sorting, and pagination.
 - Support multiple listing images and Cloudinary asset cleanup on replacement/deletion.
+- Add Google OAuth 2.0 authentication.
 - Add stronger production security settings for sessions, cookies, secrets, and rate limiting.
 - Add automated tests for routes, validation, authentication, uploads, and database behavior.
 - Add deployment configuration for hosted MongoDB, Cloudinary, and a production server.
 
 ## Why This Project?
 
-HairBnB is designed as a practical backend engineering project rather than a single-file CRUD demo. It explores authentication, authorization, relational document modeling, validation, middleware composition, sessions, OAuth, file uploads, cloud storage, error handling, and an MVC-inspired application structure in a real marketplace-style domain.
+HairBnB is designed as a practical backend engineering project rather than a single-file CRUD demo. It explores authentication, authorization, relational document modeling, validation, middleware composition, persistent sessions, file uploads, cloud storage, error handling, and an MVC-inspired application structure in a real marketplace-style domain.
+
+## Future Scope
+
+Planned extensions include:
+
+- **Google OAuth 2.0** for social login and account creation.
+- **Booking and availability management** with conflict prevention.
+- **Advanced listing discovery** through search, filtering, sorting, pagination, and geolocation.
+- **Multiple image support** with complete Cloudinary asset lifecycle management.
+- **Production hardening** including secure cookies, rate limiting, monitoring, and automated tests.
 
 ## License
 
